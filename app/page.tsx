@@ -4,23 +4,14 @@ import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 
 type Variant = { label: string; image: string; obtained: boolean };
-type Gustambito = {
-  id: number;
-  name: string;
-  subtitle: string;
-  rarity: "Mítico" | "Épico" | "Raro";
-  color: string;
-  image: string;
-  season: string;
-  variants: Variant[];
-};
+type Gustambito = { id: number; name: string; subtitle: string; rarity: "Mítico" | "Épico" | "Raro"; color: string; image: string; season: string; variants: Variant[] };
+type VariantCard = { item: Gustambito; variant: Variant; variantIndex: number };
 
-const spriteUrl = (key: string, variant = "") =>
-  `https://fortnite.gg/img/x/sprites/icons/T_Icon_BR_Creature_Sprite_${key}${variant ? `_${variant}` : ""}_L.webp`;
+const spriteUrl = (key: string, variant = "") => `https://fortnite.gg/img/x/sprites/icons/T_Icon_BR_Creature_Sprite_${key}${variant ? `_${variant}` : ""}_L.webp`;
 const makeVariants = (key: string, owned: boolean[] = [false, false, false]): Variant[] => [
   { label: "Base", image: spriteUrl(key), obtained: owned[0] },
   { label: "Dorado", image: spriteUrl(key, "Gold"), obtained: owned[1] },
-  { label: "Cheat", image: spriteUrl(key, "Cheatmaster"), obtained: owned[2] },
+  { label: "Cheat Master", image: spriteUrl(key, "Cheatmaster"), obtained: owned[2] },
 ];
 
 const initialGustambitos: Gustambito[] = [
@@ -43,35 +34,19 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("Todos");
   const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    const saved = window.localStorage.getItem("gustambitos-glitch-v3");
-    if (saved) setGustambitos(JSON.parse(saved));
-    window.requestAnimationFrame(() => setHydrated(true));
-  }, []);
-
+  useEffect(() => { const saved = window.localStorage.getItem("gustambitos-glitch-v3"); if (saved) setGustambitos(JSON.parse(saved)); window.requestAnimationFrame(() => setHydrated(true)); }, []);
   const visible = hydrated ? gustambitos : initialGustambitos;
-  const toggleVariant = (id: number, variantIndex: number) => {
-    const next = gustambitos.map((item) => item.id !== id ? item : {
-      ...item,
-      variants: item.variants.map((variant, index) => index === variantIndex ? { ...variant, obtained: !variant.obtained } : variant),
-    });
-    setGustambitos(next);
-    window.localStorage.setItem("gustambitos-glitch-v3", JSON.stringify(next));
-  };
-  const filtered = useMemo(() => visible.filter((item) =>
-    (filter === "Todos" || (filter === "Conseguidos" ? item.variants.some((variant) => variant.obtained) : item.rarity === filter)) &&
-    item.name.toLowerCase().includes(query.toLowerCase())
-  ), [filter, visible, query]);
-  const collected = visible.reduce((total, item) => total + item.variants.filter((variant) => variant.obtained).length, 0);
-  const totalVariants = visible.length * 3;
-  const progress = Math.round((collected / totalVariants) * 100);
+  const toggleVariant = (id: number, variantIndex: number) => { const next = gustambitos.map((item) => item.id !== id ? item : { ...item, variants: item.variants.map((variant, index) => index === variantIndex ? { ...variant, obtained: !variant.obtained } : variant) }); setGustambitos(next); window.localStorage.setItem("gustambitos-glitch-v3", JSON.stringify(next)); };
+  const cards = useMemo<VariantCard[]>(() => visible.flatMap((item) => item.variants.map((variant, variantIndex) => ({ item, variant, variantIndex }))), [visible]);
+  const filtered = useMemo(() => cards.filter(({ item, variant }) => (filter === "Todos" || (filter === "Conseguidos" ? variant.obtained : item.rarity === filter)) && `${item.name} ${variant.label}`.toLowerCase().includes(query.toLowerCase())), [cards, filter, query]);
+  const collected = cards.filter(({ variant }) => variant.obtained).length;
+  const progress = Math.round((collected / cards.length) * 100);
 
   return <main className="shell">
     <nav className="topbar"><div className="brand"><span className="brand-mark">G</span><span>GUSTAMBITOS</span></div><div className="season-pill"><span className="live-dot" /> GLITCH · TEMPORADA 04 <span className="season-arrow">⌄</span></div><button className="profile" aria-label="Abrir perfil">L<span /></button></nav>
     <section className="hero"><div className="hero-copy"><p className="eyebrow">NUEVA TEMPORADA · CAPÍTULO 7</p><h1>Colecciónalos<br /><em>todos.</em></h1><p className="hero-text">Tu álbum personal de Gustambitos. Marca tus hallazgos y descubre cuánto te falta para completar la temporada.</p><div className="hero-actions"><button className="primary-button" onClick={() => document.getElementById("collection")?.scrollIntoView({ behavior: "smooth" })}>Ver colección <span>↘</span></button><span className="updated">Actualizado hoy · 20 ago 2026</span></div></div><div className="hero-orbit" aria-hidden="true"><div className="orbit orbit-one" /><div className="orbit orbit-two" /><div className="mascot">✦</div><span className="orbit-tag tag-one">NUEVO</span><span className="orbit-tag tag-two">36 TOTAL</span></div></section>
-    <section className="stats-row" aria-label="Resumen de colección"><div className="stat-card progress-card"><div className="stat-label">PROGRESO DE TEMPORADA</div><div className="progress-number">{progress}<small>%</small></div><div className="progress-track"><span style={{ width: `${progress}%` }} /></div><div className="stat-foot"><span>{collected} conseguidos</span><span>{totalVariants - collected} pendientes</span></div></div><div className="stat-card"><div className="stat-label">ÚLTIMO HALLAZGO</div><div className="last-found"><span className="mini-icon">⚡</span><div><strong>Variante de GLITCH</strong><small>tu colección personal</small></div></div></div><div className="stat-card streak-card"><div className="stat-label">RACHA DE COLECCIÓN</div><div className="streak">03 <span>días</span> <b>✦</b></div><small>¡Sigue así, vas volando!</small></div></section>
-    <section className="collection-section" id="collection"><div className="section-heading"><div><p className="eyebrow">TU ÁLBUM · GLITCH</p><h2>Todos los Gustambitos</h2></div><span className="count-badge">{collected}/{totalVariants} VARIANTES</span></div><div className="toolbar"><div className="search"><span>⌕</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar Gustambito..." aria-label="Buscar Gustambito" /></div><div className="filters">{["Todos", "Conseguidos", "Mítico", "Épico", "Raro"].map((item) => <button key={item} className={filter === item ? "active" : ""} onClick={() => setFilter(item)}>{item}</button>)}</div></div><div className="grid">{filtered.map((item) => <article className="gustambito-card" key={item.id}><div className="card-visual" style={{ "--accent": item.color } as CSSProperties}><div className="card-no">#{String(item.id).padStart(2, "0")}</div><img className="sprite-image" src={item.image} alt={item.name} /><span className="rarity">{item.rarity}</span></div><div className="card-info"><div><h3>{item.name}</h3><p>{item.subtitle}</p></div><span className="variant-progress">{item.variants.filter((variant) => variant.obtained).length}/3</span></div><div className="variant-row">{item.variants.map((variant, index) => <button key={variant.label} className={`variant-button ${variant.obtained ? "selected" : ""}`} onClick={() => toggleVariant(item.id, index)} aria-label={`${variant.obtained ? "Quitar" : "Marcar"} variante ${variant.label} de ${item.name}`}><img src={variant.image} alt="" /><span>{variant.label}</span>{variant.obtained && <b>✓</b>}</button>)}</div><div className="card-season">{item.season}</div></article>)}</div>{filtered.length === 0 && <div className="empty">No encontramos ese Gustambito. Prueba con otro nombre.</div>}</section>
-    <footer><span>GUSTAMBITOS <i>✦</i></span><span>Hecho para coleccionistas de la isla · v1.1</span></footer>
+    <section className="stats-row" aria-label="Resumen de colección"><div className="stat-card progress-card"><div className="stat-label">PROGRESO DE TEMPORADA</div><div className="progress-number">{progress}<small>%</small></div><div className="progress-track"><span style={{ width: `${progress}%` }} /></div><div className="stat-foot"><span>{collected} conseguidas</span><span>{cards.length - collected} pendientes</span></div></div><div className="stat-card"><div className="stat-label">COLECCIÓN ACTUAL</div><div className="last-found"><span className="mini-icon">✦</span><div><strong>GLITCH</strong><small>12 sprites · 36 variantes</small></div></div></div><div className="stat-card streak-card"><div className="stat-label">RACHA DE COLECCIÓN</div><div className="streak">03 <span>días</span> <b>✦</b></div><small>¡Sigue así, vas volando!</small></div></section>
+    <section className="collection-section" id="collection"><div className="section-heading"><div><p className="eyebrow">TU ÁLBUM · GLITCH</p><h2>Variantes de Gustambitos</h2></div><span className="count-badge">{collected}/{cards.length} CONSEGUIDAS</span></div><div className="toolbar"><div className="search"><span>⌕</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar sprite o variante..." aria-label="Buscar sprite o variante" /></div><div className="filters">{["Todos", "Conseguidos", "Mítico", "Épico", "Raro"].map((item) => <button key={item} className={filter === item ? "active" : ""} onClick={() => setFilter(item)}>{item}</button>)}</div></div><div className="grid">{filtered.map(({ item, variant, variantIndex }) => <article className="gustambito-card" key={`${item.id}-${variant.label}`}><div className="card-visual" style={{ "--accent": item.color } as CSSProperties}><div className="card-no">#{String(item.id).padStart(2, "0")}</div><img className="sprite-image" src={variant.image} alt={`${item.name} ${variant.label}`} /><span className="rarity">{variant.label}</span></div><div className="card-info"><div><h3>{item.name}</h3><p>{item.subtitle}</p></div><span className="variant-progress">{variant.obtained ? "CONSEGUIDA" : "PENDIENTE"}</span></div><button className={`variant-single-button ${variant.obtained ? "selected" : ""}`} onClick={() => toggleVariant(item.id, variantIndex)}>{variant.obtained ? "✓ Conseguida" : "＋ Marcar como conseguida"}</button><div className="card-season">{item.season}</div></article>)}</div>{filtered.length === 0 && <div className="empty">No encontramos ese Gustambito. Prueba con otro nombre.</div>}</section>
+    <footer><span>GUSTAMBITOS <i>✦</i></span><span>Hecho para coleccionistas de la isla · v1.2</span></footer>
   </main>;
 }
