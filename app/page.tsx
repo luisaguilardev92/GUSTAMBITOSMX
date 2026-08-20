@@ -24,11 +24,13 @@ export default function Home() {
   const [gustambitos, setGustambitos] = useState(initialGustambitos);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("Todos");
-  useEffect(() => { const saved = window.localStorage.getItem("gustambitos-glitch-v2"); if (saved) setGustambitos(JSON.parse(saved)); }, []);
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => { const saved = window.localStorage.getItem("gustambitos-glitch-v2"); if (saved) setGustambitos(JSON.parse(saved)); window.requestAnimationFrame(() => setHydrated(true)); }, []);
+  const visibleGustambitos = hydrated ? gustambitos : initialGustambitos;
   const toggleObtained = (id: number) => { const next = gustambitos.map((item) => item.id === id ? { ...item, obtained: !item.obtained } : item); setGustambitos(next); window.localStorage.setItem("gustambitos-glitch-v2", JSON.stringify(next)); };
-  const filtered = useMemo(() => gustambitos.filter((item) => (filter === "Todos" || (filter === "Conseguidos" ? item.obtained : item.rarity === filter)) && item.name.toLowerCase().includes(query.toLowerCase())), [filter, gustambitos, query]);
-  const collected = gustambitos.filter((item) => item.obtained).length;
-  const progress = Math.round((collected / gustambitos.length) * 100);
+  const filtered = useMemo(() => visibleGustambitos.filter((item) => (filter === "Todos" || (filter === "Conseguidos" ? item.obtained : item.rarity === filter)) && item.name.toLowerCase().includes(query.toLowerCase())), [filter, visibleGustambitos, query]);
+  const collected = visibleGustambitos.filter((item) => item.obtained).length;
+  const progress = Math.round((collected / visibleGustambitos.length) * 100);
 
   return <main className="shell">
     <nav className="topbar"><div className="brand"><span className="brand-mark">G</span><span>GUSTAMBITOS</span></div><div className="season-pill"><span className="live-dot" /> GLITCH · TEMPORADA 04 <span className="season-arrow">⌄</span></div><button className="profile" aria-label="Abrir perfil">L<span /></button></nav>
