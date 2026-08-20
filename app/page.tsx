@@ -6,18 +6,18 @@ import type { CSSProperties } from "react";
 type Gustambito = { id: number; name: string; subtitle: string; rarity: "Mítico" | "Épico" | "Raro"; color: string; image: string; season: string; obtained: boolean };
 
 const initialGustambitos: Gustambito[] = [
-  { id: 1, name: "Klombo", subtitle: "El gigante amistoso", rarity: "Mítico", color: "#ef63c4", image: "/sprites/klombo.jpg", season: "GLITCH · Capítulo 7", obtained: true },
-  { id: 2, name: "Arbusto", subtitle: "Se camufla en la isla", rarity: "Raro", color: "#79c85b", image: "/sprites/arbusto.jpg", season: "GLITCH · Capítulo 7", obtained: true },
-  { id: 3, name: "Killswitch", subtitle: "Controla el sistema", rarity: "Épico", color: "#94a5a1", image: "/sprites/killswitch.jpg", season: "GLITCH · Capítulo 7", obtained: false },
-  { id: 4, name: "Aventura", subtitle: "Siempre busca el siguiente nivel", rarity: "Épico", color: "#c47f48", image: "/sprites/aventura.jpg", season: "GLITCH · Capítulo 7", obtained: false },
-  { id: 5, name: "Jonesy", subtitle: "El héroe de siempre", rarity: "Épico", color: "#ef7b5b", image: "/sprites/jonesy.jpg", season: "GLITCH · Capítulo 7", obtained: false },
-  { id: 6, name: "Liebre", subtitle: "Salta más lejos", rarity: "Raro", color: "#8ed35b", image: "/sprites/liebre.jpg", season: "GLITCH · Capítulo 7", obtained: false },
-  { id: 7, name: "8 Bits", subtitle: "Directo desde el arcade", rarity: "Épico", color: "#e86552", image: "/sprites/8-bits.jpg", season: "GLITCH · Capítulo 7", obtained: true },
-  { id: 8, name: "Explorador", subtitle: "Descubre mundos nuevos", rarity: "Raro", color: "#a775dd", image: "/sprites/explorador.jpg", season: "GLITCH · Capítulo 7", obtained: false },
-  { id: 9, name: "Corona", subtitle: "Realeza en el lobby", rarity: "Mítico", color: "#e6534e", image: "/sprites/corona.jpg", season: "GLITCH · Capítulo 7", obtained: false },
-  { id: 10, name: "Sonic", subtitle: "Corre a velocidad sónica", rarity: "Mítico", color: "#55b7ed", image: "/sprites/sonic.jpg", season: "GLITCH · Capítulo 7", obtained: false },
-  { id: 11, name: "Shadow", subtitle: "Se mueve entre las sombras", rarity: "Épico", color: "#5b4e74", image: "/sprites/shadow.jpg", season: "GLITCH · Capítulo 7", obtained: false },
-  { id: 12, name: "Tails", subtitle: "El compañero volador", rarity: "Épico", color: "#e98b42", image: "/sprites/tails.jpg", season: "GLITCH · Capítulo 7", obtained: false },
+  { id: 1, name: "Jackrabbit", subtitle: "Salta más lejos", rarity: "Raro", color: "#8ed35b", image: "/sprites/liebre.jpg", season: "GLITCH · Capítulo 7", obtained: true },
+  { id: 2, name: "Shadow", subtitle: "Se mueve entre las sombras", rarity: "Épico", color: "#5b4e74", image: "/sprites/shadow.jpg", season: "GLITCH · Capítulo 7", obtained: false },
+  { id: 3, name: "Bush", subtitle: "Se camufla en la isla", rarity: "Raro", color: "#79c85b", image: "/sprites/arbusto.jpg", season: "GLITCH · Capítulo 7", obtained: true },
+  { id: 4, name: "Tails", subtitle: "El compañero volador", rarity: "Épico", color: "#e98b42", image: "/sprites/tails.jpg", season: "GLITCH · Capítulo 7", obtained: false },
+  { id: 5, name: "Killswitch", subtitle: "Controla el sistema", rarity: "Épico", color: "#94a5a1", image: "/sprites/killswitch.jpg", season: "GLITCH · Capítulo 7", obtained: false },
+  { id: 6, name: "Adventure", subtitle: "Siempre busca el siguiente nivel", rarity: "Épico", color: "#c47f48", image: "/sprites/aventura.jpg", season: "GLITCH · Capítulo 7", obtained: false },
+  { id: 7, name: "Klombo", subtitle: "El gigante amistoso", rarity: "Mítico", color: "#ef63c4", image: "/sprites/klombo.jpg", season: "GLITCH · Capítulo 7", obtained: true },
+  { id: 8, name: "Jonesy", subtitle: "El héroe de siempre", rarity: "Épico", color: "#ef7b5b", image: "/sprites/jonesy.jpg", season: "GLITCH · Capítulo 7", obtained: false },
+  { id: 9, name: "Sonic", subtitle: "Corre a velocidad sónica", rarity: "Mítico", color: "#55b7ed", image: "/sprites/sonic.jpg", season: "GLITCH · Capítulo 7", obtained: false },
+  { id: 10, name: "Crown", subtitle: "Realeza en el lobby", rarity: "Mítico", color: "#e6534e", image: "/sprites/corona.jpg", season: "GLITCH · Capítulo 7", obtained: false },
+  { id: 11, name: "8-Bit", subtitle: "Directo desde el arcade", rarity: "Épico", color: "#e86552", image: "/sprites/8-bits.jpg", season: "GLITCH · Capítulo 7", obtained: true },
+  { id: 12, name: "Storm Scout", subtitle: "Descubre el siguiente círculo", rarity: "Raro", color: "#a775dd", image: "/sprites/explorador.jpg", season: "GLITCH · Capítulo 7", obtained: false },
 ];
 
 export default function Home() {
