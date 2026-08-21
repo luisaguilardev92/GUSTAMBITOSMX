@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 type Variant = { label: string; image: string; level: number };
 type Gustambito = { id: number; name: string; subtitle: string; rarity: "Mítico" | "Épico" | "Raro"; color: string; image: string; season: string; variants: Variant[] };
@@ -31,7 +31,12 @@ const initialGustambitos: Gustambito[] = [
 
 const migrate = (value: Gustambito[]): Gustambito[] => value.map((item) => ({ ...item, variants: item.variants.map((variant) => ({ ...variant, level: typeof variant.level === "number" ? variant.level : ("obtained" in variant && variant.obtained ? 1 : 0) })) }));
 
+function LoginScreen() {
+  return <main className="login-screen"><div className="login-glow" /><div className="login-card"><div className="brand login-brand"><span className="brand-mark">G</span><span>GUSTAMBITOS</span></div><p className="eyebrow">GLITCH · TEMPORADA 04</p><div className="login-mascot">♛</div><h1>Tu colección<br /><em>empieza aquí.</em></h1><p className="login-copy">Inicia sesión para guardar tus niveles, variantes y Gustambitos dominados.</p><button className="google-button" onClick={() => signIn("google")}><span className="google-icon">G</span>Continuar con Google</button><small className="login-note">Tu progreso quedará asociado a tu cuenta.</small></div></main>;
+}
+
 export default function Home() {
+  const { status } = useSession();
   const [gustambitos, setGustambitos] = useState(initialGustambitos);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("Todos");
@@ -44,6 +49,8 @@ export default function Home() {
   const collected = cards.filter(({ variant }) => variant.level > 0).length;
   const mastered = cards.filter(({ variant }) => variant.level === 5).length;
   const progress = Math.round((collected / cards.length) * 100);
+
+  if (status !== "authenticated") return <LoginScreen />;
 
   return <main className="shell">
     <nav className="topbar"><div className="brand"><span className="brand-mark">G</span><span>GUSTAMBITOS</span></div><div className="season-pill"><span className="live-dot" /> GLITCH · TEMPORADA 04 <span className="season-arrow">⌄</span></div><button className="profile" onClick={() => signIn("google")} aria-label="Iniciar sesión con Google">L<span /></button></nav>
