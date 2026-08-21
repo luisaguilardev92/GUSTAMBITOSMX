@@ -59,16 +59,13 @@ async function downloadCollectionImage(items: Gustambito[], friendCode: string) 
   for (let x = 0; x < canvas.width; x += 28) { context.beginPath(); context.moveTo(x, 0); context.lineTo(x, canvas.height); context.stroke(); }
   for (let y = 0; y < canvas.height; y += 28) { context.beginPath(); context.moveTo(0, y); context.lineTo(canvas.width, y); context.stroke(); }
   context.fillStyle = "#fff";
-  context.font = "900 34px Arial";
-  context.fillText("GUSTAMBITOSMX", 34, 50);
-  context.fillStyle = "#39e8ff";
-  context.font = "900 15px Arial";
-  context.fillText("GLITCH · MI COLECCIÓN", 36, 80);
+  context.font = "900 32px Arial";
+  context.fillText("gustambitosmx.vercel.app", 34, 55);
   const collected = cards.filter(({ variant }) => variant.level > 0).length;
   const mastered = cards.filter(({ variant }) => variant.level === 5).length;
   context.fillStyle = "#ff36ba";
   context.font = "900 18px Arial";
-  context.fillText(`${collected}/${cards.length} CONSEGUIDOS · ${mastered} DOMINADOS`, 36, 120);
+  context.fillText(`${collected}/${cards.length} CONSEGUIDOS · ${mastered} DOMINADOS`, 36, 105);
   const crown = await loadExportImage("/mastered-crown.png");
   for (const [index, { item, variant }] of cards.entries()) {
     const x = (index % columns) * cellWidth + 10;
@@ -95,12 +92,9 @@ async function downloadCollectionImage(items: Gustambito[], friendCode: string) 
   const footerY = canvas.height - 31;
   context.strokeStyle = "#39e8ff";
   context.beginPath(); context.moveTo(30, footerY - 28); context.lineTo(canvas.width - 30, footerY - 28); context.stroke();
-  context.fillStyle = "#9ab9d6";
-  context.font = "11px Arial";
-  context.fillText("gustambitosmx.vercel.app", 30, footerY);
   context.fillStyle = "#ffd84d";
-  context.font = "900 11px Arial";
-  context.fillText(`ID AMIGO: ${friendCode || "--------"}`, canvas.width - 220, footerY);
+  context.font = "900 22px Arial";
+  context.fillText(`ID AMIGO: ${friendCode || "--------"}`, 30, footerY);
   const link = document.createElement("a");
   link.download = "gustambitosmx-coleccion.png";
   link.href = canvas.toDataURL("image/png");
