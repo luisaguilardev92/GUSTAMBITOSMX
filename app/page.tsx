@@ -70,16 +70,14 @@ async function downloadCollectionImage(items: Gustambito[], friendCode: string) 
   for (const [index, { item, variant }] of cards.entries()) {
     const x = (index % columns) * cellWidth + 10;
     const y = 166 + Math.floor(index / columns) * cellHeight;
+    context.strokeStyle = "rgba(57,232,255,.9)";
+    context.strokeRect(x - 4, y + 3, cellWidth - 20, cellHeight - 12);
+    context.strokeStyle = "rgba(255,54,186,.9)";
+    context.strokeRect(x + 4, y - 3, cellWidth - 20, cellHeight - 12);
     context.fillStyle = variant.level > 0 ? "#0d3267" : "#101d35";
     context.fillRect(x, y, cellWidth - 20, cellHeight - 12);
     context.strokeStyle = variant.level > 0 ? "#277bad" : "#31435d";
     context.strokeRect(x, y, cellWidth - 20, cellHeight - 12);
-    context.fillStyle = "rgba(57,232,255,.7)";
-    context.fillRect(x + 8, y + 24, 28, 3);
-    context.fillRect(x + 128, y + 116, 42, 3);
-    context.fillStyle = "rgba(255,54,186,.8)";
-    context.fillRect(x + 132, y + 38, 22, 3);
-    context.fillRect(x + 18, y + 112, 18, 3);
     const sprite = await loadExportImage(variant.image);
     context.save();
     context.filter = variant.level === 0 ? "grayscale(1) brightness(.42)" : "none";
