@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "framework": null,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/client",
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api" },
+    { "source": "/((?!_next/|sprites/|favicon.svg|file.svg|globe.svg|window.svg|manifest.webmanifest|sw.js|gustambitos-icon.*|mastered-crown.png).*)", "destination": "/api" }
+  ]
+}
