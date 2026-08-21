@@ -36,3 +36,10 @@ alter table public.user_friends enable row level security;
 
 grant usage on schema public to service_role;
 grant select, insert, update, delete on public.user_profiles, public.gustambito_progress, public.user_friends to service_role;
+
+do $$
+begin
+  alter publication supabase_realtime add table public.gustambito_progress;
+exception when duplicate_object then
+  null;
+end $$;
