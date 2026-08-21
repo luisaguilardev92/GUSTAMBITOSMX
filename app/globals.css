@@ -48,6 +48,8 @@
 @media (max-width:450px){.shell{padding:0 12px;overflow-x:hidden}.topbar{height:68px;gap:8px}.brand{font-size:10px;gap:6px}.brand-mark{width:27px;height:27px;font-size:15px}.friends-button{padding:7px 8px;font-size:8px}.profile{width:34px;height:34px}.hero-copy{padding:42px 0 28px}.hero h1{font-size:42px;line-height:.88;letter-spacing:-.09em;overflow-wrap:anywhere}.hero-text{font-size:12px;line-height:1.45}.hero-actions{margin-top:24px}.primary-button{padding:12px 15px;font-size:10px}.stats-row{display:flex;gap:8px;overflow-x:auto;padding:14px 0 4px;scroll-snap-type:x mandatory}.stats-row .stat-card{flex:0 0 min(82vw,300px);min-height:112px;scroll-snap-align:start;padding:17px}.progress-number{font-size:30px}.collection-section{padding-top:48px}.section-heading h2{font-size:25px}}
 .export-button{border:1px solid var(--pink);color:#fff;background:#8c1f73;border-radius:3px;padding:8px 12px;font-size:10px;font-weight:900;white-space:nowrap;box-shadow:3px 3px 0 var(--cyan)}
 .export-button:disabled{opacity:.65;cursor:wait}
+.missing-card .sprite-image{filter:grayscale(1) brightness(.48);opacity:.72}
+.missing-card .card-info h3,.missing-card .card-info p{color:#71839e}
 @media (max-width:800px){.export-button{flex:0 0 auto}}
 .stats-row{display:none!important}
 @media (max-width:450px){.filters{display:flex;flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;overflow-y:hidden;gap:5px;padding:2px 2px 7px;scrollbar-width:none}.filters::-webkit-scrollbar{display:none}.filters button{flex:0 0 auto;padding:7px 9px;font-size:8px}}

@@ -140,6 +140,7 @@ export default function Home() {
   const friendVariants = selectedFriend ? initialGustambitos.flatMap((item) => item.variants.map((variant) => ({ item, variant, level: selectedFriend.progress.find((entry) => entry.gustambito_id === item.id && entry.variant_label === variant.label)?.level ?? 0 }))).filter(({ level }) => friendFilter === "Todos" || (friendFilter === "Conseguidos" ? level > 0 : level === 0)) : [];
   const exportCollection = async () => { setExporting(true); try { await downloadCollectionImage(visible, myFriendCode); } finally { setExporting(false); } };
   useEffect(() => { const toolbar = document.querySelector(".toolbar"); if (!toolbar) return; const button = document.createElement("button"); button.className = "export-button"; button.textContent = exporting ? "GENERANDO..." : "DESCARGAR IMAGEN"; button.disabled = exporting; button.onclick = () => void exportCollection(); toolbar.append(button); return () => button.remove(); }, [visible, myFriendCode, exporting]);
+  useEffect(() => { document.querySelectorAll<HTMLElement>(".gustambito-card").forEach((card) => { const level = card.querySelector(".level-badge")?.textContent; card.classList.toggle("missing-card", level === "NIVEL 0/5"); }); }, [visible, filter, query]);
 
   if (status !== "authenticated") return <LoginScreen />;
 
