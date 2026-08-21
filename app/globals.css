@@ -12,3 +12,5 @@
 @media (max-width:800px){.hero h1{font-size:58px}}
 .crown{left:50%;top:25px;bottom:auto;transform:translateX(-50%) rotate(-7deg);font-size:25px;color:#ffe51f;filter:drop-shadow(0 0 4px #ffb300);text-shadow:2px 2px 0 #c47700,0 0 10px rgba(255,229,31,.8)}
 @media (max-width:450px){.crown{top:17px;font-size:18px}}
+.crown{width:46px;height:30px;display:grid;place-items:center;z-index:3;mix-blend-mode:screen}.crown img{width:58px;height:38px;object-fit:contain;mix-blend-mode:screen;filter:saturate(1.15)}
+@media (max-width:450px){.crown{width:31px;height:22px}.crown img{width:39px;height:26px}}
