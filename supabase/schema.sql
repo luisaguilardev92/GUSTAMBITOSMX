@@ -1,5 +1,6 @@
 create table if not exists public.user_profiles (
   email text primary key,
+  friend_code text unique not null default upper(substr(md5(random()::text || clock_timestamp()::text), 1, 8)),
   name text,
   image text,
   created_at timestamptz not null default now(),
@@ -17,3 +18,18 @@ create table if not exists public.gustambito_progress (
 
 alter table public.user_profiles enable row level security;
 alter table public.gustambito_progress enable row level security;
+
+alter table public.user_profiles add column if not exists friend_code text;
+update public.user_profiles set friend_code = upper(substr(md5(random()::text || clock_timestamp()::text), 1, 8)) where friend_code is null;
+alter table public.user_profiles alter column friend_code set not null;
+create unique index if not exists user_profiles_friend_code_idx on public.user_profiles(friend_code);
+
+create table if not exists public.user_friends (
+  owner_email text not null references public.user_profiles(email) on delete cascade,
+  friend_email text not null references public.user_profiles(email) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (owner_email, friend_email),
+  check (owner_email <> friend_email)
+);
+
+alter table public.user_friends enable row level security;
