@@ -36,7 +36,7 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("Todos");
   const [hydrated, setHydrated] = useState(false);
-  useEffect(() => { const saved = window.localStorage.getItem("gustambitos-glitch-v4"); if (saved) setGustambitos(migrate(JSON.parse(saved))); window.requestAnimationFrame(() => setHydrated(true)); }, []);
+  useEffect(() => { const saved = window.localStorage.getItem("gustambitos-glitch-v4") ?? window.localStorage.getItem("gustambitos-glitch-v3"); if (saved) setGustambitos(migrate(JSON.parse(saved))); window.requestAnimationFrame(() => setHydrated(true)); }, []);
   const visible = hydrated ? gustambitos : initialGustambitos;
   const setLevel = (id: number, variantIndex: number, level: number) => { const next = gustambitos.map((item) => item.id !== id ? item : { ...item, variants: item.variants.map((variant, index) => index === variantIndex ? { ...variant, level } : variant) }); setGustambitos(next); window.localStorage.setItem("gustambitos-glitch-v4", JSON.stringify(next)); };
   const cards = useMemo<VariantCard[]>(() => visible.flatMap((item) => item.variants.map((variant, variantIndex) => ({ item, variant, variantIndex }))), [visible]);
