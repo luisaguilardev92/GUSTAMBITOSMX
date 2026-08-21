@@ -1,0 +1,18 @@
+{
+  "name": "GUSTAMBITOSMX",
+  "short_name": "GUSTAMBITOSMX",
+  "description": "Tu colección de Gustambitos de Fortnite GLITCH.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#08082f",
+  "theme_color": "#08082f",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/gustambitos-icon-transparent.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

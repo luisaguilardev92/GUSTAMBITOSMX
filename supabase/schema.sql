@@ -34,8 +34,19 @@ create table if not exists public.user_friends (
 
 alter table public.user_friends enable row level security;
 
+drop policy if exists "realtime can read progress" on public.gustambito_progress;
+create policy "realtime can read progress"
+  on public.gustambito_progress
+  for select
+  to anon, authenticated
+  using (true);
+
 grant usage on schema public to service_role;
 grant select, insert, update, delete on public.user_profiles, public.gustambito_progress, public.user_friends to service_role;
+grant select on public.gustambito_progress to anon, authenticated;
+drop trigger if exists gustambito_progress_broadcast on public.gustambito_progress;
+drop function if exists public.broadcast_gustambito_progress();
+alter table public.gustambito_progress replica identity full;
 
 do $$
 begin
