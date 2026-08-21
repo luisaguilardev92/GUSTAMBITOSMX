@@ -1,8 +1,8 @@
 import { auth } from "../../../auth";
 import { supabase } from "../../../lib/supabase";
 
-export async function GET() {
-  const session = await auth();
+export async function GET(request: Request) {
+  const session = await auth(request);
   const email = session?.user?.email;
   if (!email) return Response.json({ error: "No autorizado" }, { status: 401 });
   if (!supabase) return Response.json({ error: "Supabase no configurado" }, { status: 503 });
@@ -14,7 +14,7 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
-  const session = await auth();
+  const session = await auth(request);
   const email = session?.user?.email;
   if (!email) return Response.json({ error: "No autorizado" }, { status: 401 });
   if (!supabase) return Response.json({ error: "Supabase no configurado" }, { status: 503 });

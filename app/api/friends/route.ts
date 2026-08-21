@@ -1,17 +1,17 @@
 import { auth } from "../../../auth";
 import { supabase } from "../../../lib/supabase";
 
-async function currentUser() {
-  const session = await auth();
+async function currentUser(request: Request) {
+  const session = await auth(request);
   return session?.user?.email ?? null;
 }
 
-export async function GET() {
-  const email = await currentUser();
+export async function GET(request: Request) {
+  const email = await currentUser(request);
   if (!email) return Response.json({ error: "No autorizado" }, { status: 401 });
   if (!supabase) return Response.json({ error: "Supabase no configurado" }, { status: 503 });
 
-  const session = await auth();
+  const session = await auth(request);
   await supabase.from("user_profiles").upsert({ email, name: session?.user?.name, image: session?.user?.image, updated_at: new Date().toISOString() });
   const { data: profile, error: profileError } = await supabase.from("user_profiles").select("email, name, image, friend_code").eq("email", email).single();
   if (profileError) return Response.json({ error: profileError.message }, { status: 500 });
@@ -27,7 +27,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const email = await currentUser();
+  const email = await currentUser(request);
   if (!email) return Response.json({ error: "No autorizado" }, { status: 401 });
   if (!supabase) return Response.json({ error: "Supabase no configurado" }, { status: 503 });
   const code = String((await request.json()).friendCode ?? "").trim().toUpperCase();
