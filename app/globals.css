@@ -74,6 +74,8 @@
 .codes-terminal{margin:20px 0 0;color:#eef7ff;font:800 14px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.04em;text-shadow:2px 0 #ff36ba}
 .codes-terminal::after{content:"▋";color:#39e8ff;animation:terminal-cursor .8s steps(2,end) infinite}
 .codes-source{color:#39e8ff;text-transform:uppercase}
+.code-copy{width:max-content;border:1px solid #39e8ff;background:rgba(57,232,255,.1);color:#39e8ff;padding:6px 9px;font-size:9px;font-weight:950;letter-spacing:.08em;cursor:pointer}.code-copy:active{transform:translate(2px,2px);color:#fff;background:#39e8ff}
+.codes-toast{position:fixed;left:50%;bottom:24px;z-index:40;transform:translate(-50%,18px);opacity:0;pointer-events:none;border:1px solid #39e8ff;background:#111452;color:#fff;padding:12px 18px;font-size:10px;font-weight:950;letter-spacing:.12em;box-shadow:4px 4px 0 #ff36ba,0 0 24px rgba(57,232,255,.45);transition:opacity .16s ease,transform .16s ease}.codes-toast.show{opacity:1;transform:translate(-50%,0)}
 @keyframes code-hack-lines{from{background-position:0 0}to{background-position:180% 0}}
 @keyframes code-hack-sweep{from{left:-35%}to{left:105%}}
 @keyframes terminal-cursor{50%{opacity:0}}

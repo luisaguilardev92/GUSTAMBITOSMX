@@ -187,6 +187,24 @@ export default function Home() {
     const usedCodes = new Set<string>(JSON.parse(window.localStorage.getItem("gustambitos-used-codes") || "[]"));
     const rows = currentFortniteCodes.length ? currentFortniteCodes.map(({ code, reward, expires }) => `<article class="code-card"><div class="code-value">${code}</div><strong>${reward}</strong>${expires ? `<small>Vence: ${expires}</small>` : ""}</article>`).join("") : `<div class="codes-empty"><span>∅</span><h3>NO HAY CÓDIGOS ACTIVOS</h3><p>Epic no tiene códigos públicos de recompensas disponibles en este momento. Regresa cuando haya una nueva promoción.</p></div>`;
     overlay.innerHTML = `<div class="codes-panel"><button class="codes-close" aria-label="Cerrar">×</button><p class="eyebrow">PANEL DE ADMINISTRACIÓN DE FORTNITE</p><h2>CÓDIGOS</h2><p class="codes-terminal">.../rootUser $ ingresa_hack_de_sala</p><p class="codes-intro">Introduce estos códigos en el panel de administración dentro de Fortnite y marca los que ya usaste.</p><div class="codes-list">${rows}</div><small class="codes-source">Consulta actualizada · Temporada GLITCH</small></div>`;
+    const toast = document.createElement("div");
+    toast.className = "codes-toast";
+    toast.setAttribute("role", "status");
+    toast.textContent = "CÓDIGO COPIADO";
+    document.body.append(toast);
+    overlay.querySelectorAll<HTMLElement>(".code-card").forEach((card) => {
+      const value = card.querySelector(".code-value")?.textContent?.trim() || "";
+      const copy = document.createElement("button");
+      copy.className = "code-copy";
+      copy.type = "button";
+      copy.textContent = "COPIAR";
+      copy.onclick = async () => {
+        await navigator.clipboard?.writeText(value);
+        toast.classList.add("show");
+        window.setTimeout(() => toast.classList.remove("show"), 1500);
+      };
+      card.querySelector(".code-value")?.after(copy);
+    });
     overlay.querySelectorAll<HTMLElement>(".code-card").forEach((card) => { const code = card.querySelector(".code-value")?.textContent?.trim() || ""; const mark = document.createElement("button"); mark.className = "code-used"; const update = () => { const used = usedCodes.has(code); card.classList.toggle("used", used); mark.textContent = used ? "✓ USADO" : "MARCAR COMO USADO"; }; mark.onclick = () => { usedCodes.has(code) ? usedCodes.delete(code) : usedCodes.add(code); window.localStorage.setItem("gustambitos-used-codes", JSON.stringify([...usedCodes])); update(); }; card.append(mark); update(); });
     actions.append(button);
     document.body.append(overlay);
@@ -195,7 +213,7 @@ export default function Home() {
     button.onclick = () => overlay.classList.add("open");
     close?.addEventListener("click", hide);
     overlay.addEventListener("click", (event) => { if (event.target === overlay) hide(); });
-    return () => { button.remove(); overlay.remove(); };
+    return () => { button.remove(); overlay.remove(); toast.remove(); };
   }, [status]);
 
   if (status !== "authenticated") return <LoginScreen />;
