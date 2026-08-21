@@ -1,12 +1,13 @@
 import { auth } from "../../../auth";
+import { getToken } from "next-auth/jwt";
 import { supabase } from "../../../lib/supabase";
 
 export const GET = auth(async (request) => {
-  const session = request.auth;
-  const email = session?.user?.email;
+  const token = await getToken({ req: request, secret: process.env.AUTH_SECRET });
+  const email = typeof token?.email === "string" ? token.email : null;
   if (!email) return Response.json({ error: "No autorizado" }, { status: 401 });
   if (!supabase) return Response.json({ error: "Supabase no configurado" }, { status: 503 });
-  await supabase.from("user_profiles").upsert({ email, name: session.user?.name, image: session.user?.image, updated_at: new Date().toISOString() });
+  await supabase.from("user_profiles").upsert({ email, name: token?.name, image: token?.picture, updated_at: new Date().toISOString() });
   const { data: profile, error: profileError } = await supabase.from("user_profiles").select("email, name, image, friend_code").eq("email", email).single();
   if (profileError) return Response.json({ error: profileError.message }, { status: 500 });
   const { data: links, error: linksError } = await supabase.from("user_friends").select("friend_email").eq("owner_email", email);
@@ -20,7 +21,8 @@ export const GET = auth(async (request) => {
 });
 
 export const POST = auth(async (request) => {
-  const email = request.auth?.user?.email;
+  const token = await getToken({ req: request, secret: process.env.AUTH_SECRET });
+  const email = typeof token?.email === "string" ? token.email : null;
   if (!email) return Response.json({ error: "No autorizado" }, { status: 401 });
   if (!supabase) return Response.json({ error: "Supabase no configurado" }, { status: 503 });
   const code = String((await request.json()).friendCode ?? "").trim().toUpperCase();
