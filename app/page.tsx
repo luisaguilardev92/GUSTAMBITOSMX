@@ -31,7 +31,27 @@ const initialGustambitos: Gustambito[] = [
   { id: 12, name: "Storm Scout", subtitle: "Descubre el siguiente círculo", rarity: "Raro", color: "#a775dd", image: spriteUrl("StormScout"), season: "GLITCH · Capítulo 7", variants: makeVariants("StormScout") },
 ];
 
-const currentFortniteCodes: { code: string; reward: string; expires?: string }[] = [];
+const currentFortniteCodes: { code: string; reward: string; expires?: string }[] = [
+  { code: "BEMOREALIEN", reward: 'Pantalla de carga "Glitch Activo"' },
+  { code: "REACHYOURIMPOSSIBLE", reward: 'Pantalla de carga "Fiesta de Bloques"' },
+  { code: "BORN2PLAY", reward: "Sprite Adventure · Cheat Master" },
+  { code: "8BITBLAST", reward: "Sprite 8-Bit · Cheat Master" },
+  { code: "IWANNAFLYHIGH", reward: "Sprite Tails · Cheat Master" },
+  { code: "GOTTAGOFAST", reward: "Sprite Sonic · Cheat Master" },
+  { code: "PLAY4ALL", reward: "Sprite Jonesy · Cheat Master" },
+  { code: "O2OVERRIDE", reward: "Llama Supply Drop + 5 Extractores Portátiles" },
+  { code: "TAKEYOURHEART", reward: "2 Aceleradores de Extracción" },
+  { code: "PERFECTORDER", reward: "4 Tacos Picantes" },
+  { code: "SURVIVETHENIGHT", reward: "2 Extractores de Código" },
+  { code: "FINDITCHAT", reward: "2 Localizadores de Código" },
+  { code: "OVERRIDEXP", reward: "40,000 XP" },
+  { code: "PERLIMPINPIN", reward: "2,000 Polvo de Espíritu" },
+  { code: "MAGILUME", reward: "2,000 Polvo de Espíritu" },
+  { code: "CHISPAMBO", reward: "2,000 Polvo de Espíritu" },
+  { code: "ABGESTAUBT", reward: "2,000 Polvo de Espíritu" },
+  { code: "LETSBLOCKANDROLL", reward: "Transformación temporal a bloque de Tetris en el lobby · Reutilizable" },
+  { code: "DONTBLOCKME", reward: "Transformación temporal a bloque de Tetris en el lobby · Reutilizable" },
+];
 
 const migrate = (value: Gustambito[]): Gustambito[] => value.map((item) => ({ ...item, variants: item.variants.map((variant) => ({ ...variant, level: typeof variant.level === "number" ? variant.level : ("obtained" in variant && variant.obtained ? 1 : 0) })) }));
 
@@ -166,7 +186,7 @@ export default function Home() {
     overlay.setAttribute("aria-label", "Códigos de Fortnite");
     const usedCodes = new Set<string>(JSON.parse(window.localStorage.getItem("gustambitos-used-codes") || "[]"));
     const rows = currentFortniteCodes.length ? currentFortniteCodes.map(({ code, reward, expires }) => `<article class="code-card"><div class="code-value">${code}</div><strong>${reward}</strong>${expires ? `<small>Vence: ${expires}</small>` : ""}<a href="https://www.fortnite.com/redeem" target="_blank" rel="noreferrer">CANJEAR ↗</a></article>`).join("") : `<div class="codes-empty"><span>∅</span><h3>NO HAY CÓDIGOS ACTIVOS</h3><p>Epic no tiene códigos públicos de recompensas disponibles en este momento. Regresa cuando haya una nueva promoción.</p><a href="https://www.fortnite.com/redeem" target="_blank" rel="noreferrer">ABRIR CANJE OFICIAL ↗</a></div>`;
-    overlay.innerHTML = `<div class="codes-panel"><button class="codes-close" aria-label="Cerrar">×</button><p class="eyebrow">GLITCH · RECOMPENSAS</p><h2>CÓDIGOS</h2><p class="codes-intro">Códigos de Fortnite disponibles y la recompensa que entregan.</p><div class="codes-list">${rows}</div><small class="codes-source">Fuente oficial: fortnite.com/redeem</small></div>`;
+    overlay.innerHTML = `<div class="codes-panel"><button class="codes-close" aria-label="Cerrar">×</button><p class="eyebrow">PANEL DE ADMINISTRACIÓN DE FORTNITE</p><h2>CÓDIGOS</h2><p class="codes-terminal">.../rootUser $ ingresa_hack_de_sala</p><p class="codes-intro">Introduce estos códigos en el panel de administración dentro de Fortnite y marca los que ya usaste.</p><div class="codes-list">${rows}</div><small class="codes-source">Consulta actualizada · Temporada GLITCH</small></div>`;
     overlay.querySelectorAll<HTMLElement>(".code-card").forEach((card) => { const code = card.querySelector(".code-value")?.textContent?.trim() || ""; const mark = document.createElement("button"); mark.className = "code-used"; const update = () => { const used = usedCodes.has(code); card.classList.toggle("used", used); mark.textContent = used ? "✓ USADO" : "MARCAR COMO USADO"; }; mark.onclick = () => { usedCodes.has(code) ? usedCodes.delete(code) : usedCodes.add(code); window.localStorage.setItem("gustambitos-used-codes", JSON.stringify([...usedCodes])); update(); }; card.append(mark); update(); });
     actions.append(button);
     document.body.append(overlay);
