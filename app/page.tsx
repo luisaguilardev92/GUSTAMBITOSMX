@@ -74,12 +74,25 @@ async function downloadCollectionImage(items: Gustambito[], friendCode: string) 
     context.fillRect(x, y, cellWidth - 20, cellHeight - 12);
     context.strokeStyle = variant.level > 0 ? "#277bad" : "#31435d";
     context.strokeRect(x, y, cellWidth - 20, cellHeight - 12);
+    context.fillStyle = "rgba(57,232,255,.7)";
+    context.fillRect(x + 8, y + 24, 28, 3);
+    context.fillRect(x + 128, y + 116, 42, 3);
+    context.fillStyle = "rgba(255,54,186,.8)";
+    context.fillRect(x + 132, y + 38, 22, 3);
+    context.fillRect(x + 18, y + 112, 18, 3);
     const sprite = await loadExportImage(variant.image);
     context.save();
     context.filter = variant.level === 0 ? "grayscale(1) brightness(.42)" : "none";
+    if (variant.level > 0) {
+      context.globalAlpha = .28;
+      context.filter = "hue-rotate(130deg) saturate(2)";
+      context.drawImage(sprite, x + 31, y + 8, 100, 110);
+      context.globalAlpha = 1;
+      context.filter = "none";
+    }
     context.drawImage(sprite, x + 35, y + 8, 100, 110);
     context.restore();
-    if (variant.level === 5) context.drawImage(crown, x + 122, y + 8, 32, 24);
+    if (variant.level === 5) context.drawImage(crown, x + 72, y - 2, 40, 30);
     context.fillStyle = variant.level > 0 ? "#fff" : "#6d7e9b";
     context.font = "900 11px Arial";
     context.fillText(item.name.toUpperCase(), x + 10, y + 133);
