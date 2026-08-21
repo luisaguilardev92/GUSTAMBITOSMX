@@ -168,7 +168,8 @@ export default function Home() {
     const rows = currentFortniteCodes.length ? currentFortniteCodes.map(({ code, reward, expires }) => `<article class="code-card"><div class="code-value">${code}</div><strong>${reward}</strong>${expires ? `<small>Vence: ${expires}</small>` : ""}<a href="https://www.fortnite.com/redeem" target="_blank" rel="noreferrer">CANJEAR ↗</a></article>`).join("") : `<div class="codes-empty"><span>∅</span><h3>NO HAY CÓDIGOS ACTIVOS</h3><p>Epic no tiene códigos públicos de recompensas disponibles en este momento. Regresa cuando haya una nueva promoción.</p><a href="https://www.fortnite.com/redeem" target="_blank" rel="noreferrer">ABRIR CANJE OFICIAL ↗</a></div>`;
     overlay.innerHTML = `<div class="codes-panel"><button class="codes-close" aria-label="Cerrar">×</button><p class="eyebrow">GLITCH · RECOMPENSAS</p><h2>CÓDIGOS</h2><p class="codes-intro">Códigos de Fortnite disponibles y la recompensa que entregan.</p><div class="codes-list">${rows}</div><small class="codes-source">Fuente oficial: fortnite.com/redeem</small></div>`;
     overlay.querySelectorAll<HTMLElement>(".code-card").forEach((card) => { const code = card.querySelector(".code-value")?.textContent?.trim() || ""; const mark = document.createElement("button"); mark.className = "code-used"; const update = () => { const used = usedCodes.has(code); card.classList.toggle("used", used); mark.textContent = used ? "✓ USADO" : "MARCAR COMO USADO"; }; mark.onclick = () => { usedCodes.has(code) ? usedCodes.delete(code) : usedCodes.add(code); window.localStorage.setItem("gustambitos-used-codes", JSON.stringify([...usedCodes])); update(); }; card.append(mark); update(); });
-    document.body.append(button, overlay);
+    actions.append(button);
+    document.body.append(overlay);
     const close = overlay.querySelector(".codes-close");
     const hide = () => overlay.classList.remove("open");
     button.onclick = () => overlay.classList.add("open");
