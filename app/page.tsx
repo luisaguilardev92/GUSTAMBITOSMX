@@ -176,7 +176,7 @@ export default function Home() {
     close?.addEventListener("click", hide);
     overlay.addEventListener("click", (event) => { if (event.target === overlay) hide(); });
     return () => { button.remove(); overlay.remove(); };
-  }, []);
+  }, [status]);
 
   if (status !== "authenticated") return <LoginScreen />;
 
