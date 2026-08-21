@@ -31,6 +31,8 @@ const initialGustambitos: Gustambito[] = [
   { id: 12, name: "Storm Scout", subtitle: "Descubre el siguiente círculo", rarity: "Raro", color: "#a775dd", image: spriteUrl("StormScout"), season: "GLITCH · Capítulo 7", variants: makeVariants("StormScout") },
 ];
 
+const currentFortniteCodes: { code: string; reward: string; expires?: string }[] = [];
+
 const migrate = (value: Gustambito[]): Gustambito[] => value.map((item) => ({ ...item, variants: item.variants.map((variant) => ({ ...variant, level: typeof variant.level === "number" ? variant.level : ("obtained" in variant && variant.obtained ? 1 : 0) })) }));
 
 const loadExportImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
@@ -152,6 +154,26 @@ export default function Home() {
   const exportCollection = async () => { setExporting(true); try { await downloadCollectionImage(visible, myFriendCode); } finally { setExporting(false); } };
   useEffect(() => { const toolbar = document.querySelector(".toolbar"); if (!toolbar) return; const button = document.createElement("button"); button.className = "export-button"; button.textContent = exporting ? "GENERANDO..." : "DESCARGAR IMAGEN"; button.disabled = exporting; button.onclick = () => void exportCollection(); toolbar.append(button); return () => button.remove(); }, [visible, myFriendCode, exporting]);
   useEffect(() => { document.querySelectorAll<HTMLElement>(".gustambito-card").forEach((card) => { const level = card.querySelector(".level-badge")?.textContent; card.classList.toggle("missing-card", level === "NIVEL 0/5"); }); }, [visible, filter, query]);
+  useEffect(() => {
+    const actions = document.querySelector(".top-actions");
+    if (!actions || document.querySelector(".codes-button")) return;
+    const button = document.createElement("button");
+    button.className = "codes-button";
+    button.textContent = "CÓDIGOS";
+    const overlay = document.createElement("div");
+    overlay.className = "codes-overlay";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-label", "Códigos de Fortnite");
+    const rows = currentFortniteCodes.length ? currentFortniteCodes.map(({ code, reward, expires }) => `<article class="code-card"><div class="code-value">${code}</div><strong>${reward}</strong>${expires ? `<small>Vence: ${expires}</small>` : ""}<a href="https://www.fortnite.com/redeem" target="_blank" rel="noreferrer">CANJEAR ↗</a></article>`).join("") : `<div class="codes-empty"><span>∅</span><h3>NO HAY CÓDIGOS ACTIVOS</h3><p>Epic no tiene códigos públicos de recompensas disponibles en este momento. Regresa cuando haya una nueva promoción.</p><a href="https://www.fortnite.com/redeem" target="_blank" rel="noreferrer">ABRIR CANJE OFICIAL ↗</a></div>`;
+    overlay.innerHTML = `<div class="codes-panel"><button class="codes-close" aria-label="Cerrar">×</button><p class="eyebrow">GLITCH · RECOMPENSAS</p><h2>CÓDIGOS</h2><p class="codes-intro">Códigos de Fortnite disponibles y la recompensa que entregan.</p><div class="codes-list">${rows}</div><small class="codes-source">Fuente oficial: fortnite.com/redeem</small></div>`;
+    document.body.append(button, overlay);
+    const close = overlay.querySelector(".codes-close");
+    const hide = () => overlay.classList.remove("open");
+    button.onclick = () => overlay.classList.add("open");
+    close?.addEventListener("click", hide);
+    overlay.addEventListener("click", (event) => { if (event.target === overlay) hide(); });
+    return () => { button.remove(); overlay.remove(); };
+  }, []);
 
   if (status !== "authenticated") return <LoginScreen />;
 
