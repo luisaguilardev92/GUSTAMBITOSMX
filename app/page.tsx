@@ -244,13 +244,53 @@ export default function Home() {
     document.body.append(overlay);
     const canvas = overlay.querySelector<HTMLElement>(".map-canvas");
     let zoom = 1;
-    const setZoom = (next: number) => { zoom = Math.max(.75, Math.min(2.5, next)); if (canvas) { canvas.style.width = "100%"; canvas.style.setProperty("--map-zoom", String(zoom)); canvas.style.setProperty("--map-marker-scale", String(1 / zoom)); } };
-    const viewport = overlay.querySelector<HTMLElement>(".map-viewport");
+    let panX = 0;
+    let panY = 0;
     let pinchDistance = 0;
+    let lastTouchX = 0;
+    let lastTouchY = 0;
+    let dragging = false;
+    const viewport = overlay.querySelector<HTMLElement>(".map-viewport");
+    const clampPan = () => {
+      if (!canvas || !viewport) return;
+      const viewportRect = viewport.getBoundingClientRect();
+      const maxX = Math.max(0, (canvas.clientWidth * zoom - viewportRect.width) / 2);
+      const maxY = Math.max(0, (canvas.clientHeight * zoom - viewportRect.height) / 2);
+      panX = Math.max(-maxX, Math.min(maxX, panX));
+      panY = Math.max(-maxY, Math.min(maxY, panY));
+    };
+    const renderMap = () => { if (!canvas) return; clampPan(); canvas.style.width = "100%"; canvas.style.transform = `translate3d(${panX}px, ${panY}px, 0) scale(${zoom})`; canvas.style.setProperty("--map-marker-scale", String(1 / zoom)); };
+    const setZoom = (next: number) => { zoom = Math.max(0.75, Math.min(4.5, next)); renderMap(); };
     const getPinchDistance = (touches: TouchList) => Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY);
-    const onTouchStart = (event: TouchEvent) => { if (event.touches.length === 2) { pinchDistance = getPinchDistance(event.touches); event.preventDefault(); } };
-    const onTouchMove = (event: TouchEvent) => { if (event.touches.length !== 2 || !pinchDistance) return; const nextDistance = getPinchDistance(event.touches); setZoom(zoom * (nextDistance / pinchDistance)); pinchDistance = nextDistance; event.preventDefault(); };
-    const onTouchEnd = () => { pinchDistance = 0; };
+    const onTouchStart = (event: TouchEvent) => {
+      if (event.touches.length === 2) { pinchDistance = getPinchDistance(event.touches); lastTouchX = (event.touches[0].clientX + event.touches[1].clientX) / 2; lastTouchY = (event.touches[0].clientY + event.touches[1].clientY) / 2; event.preventDefault(); }
+      else if (event.touches.length === 1 && zoom > 1) { dragging = true; lastTouchX = event.touches[0].clientX; lastTouchY = event.touches[0].clientY; event.preventDefault(); }
+    };
+    const onTouchMove = (event: TouchEvent) => {
+      if (event.touches.length === 2 && pinchDistance) {
+        const nextDistance = getPinchDistance(event.touches);
+        const centerX = (event.touches[0].clientX + event.touches[1].clientX) / 2;
+        const centerY = (event.touches[0].clientY + event.touches[1].clientY) / 2;
+        panX += centerX - lastTouchX; panY += centerY - lastTouchY;
+        setZoom(zoom * (nextDistance / pinchDistance));
+        pinchDistance = nextDistance; lastTouchX = centerX; lastTouchY = centerY; event.preventDefault();
+      } else if (event.touches.length === 1 && dragging) {
+        panX += event.touches[0].clientX - lastTouchX; panY += event.touches[0].clientY - lastTouchY;
+        lastTouchX = event.touches[0].clientX; lastTouchY = event.touches[0].clientY; renderMap(); event.preventDefault();
+      }
+    };
+    const onTouchEnd = () => { pinchDistance = 0; dragging = false; };
+    const onWheel = (event: WheelEvent) => { event.preventDefault(); setZoom(zoom + (event.deltaY < 0 ? 0.25 : -0.25)); };
+    const onPointerDown = (event: PointerEvent) => { if (event.pointerType === "mouse" && zoom > 1) { dragging = true; lastTouchX = event.clientX; lastTouchY = event.clientY; viewport?.setPointerCapture(event.pointerId); } };
+    const onPointerMove = (event: PointerEvent) => { if (!dragging || event.pointerType !== "mouse") return; panX += event.clientX - lastTouchX; panY += event.clientY - lastTouchY; lastTouchX = event.clientX; lastTouchY = event.clientY; renderMap(); };
+    const onPointerUp = () => { dragging = false; };
+    viewport?.addEventListener("wheel", onWheel, { passive: false });
+    viewport?.addEventListener("pointerdown", onPointerDown);
+    viewport?.addEventListener("pointermove", onPointerMove);
+    viewport?.addEventListener("pointerup", onPointerUp);
+    viewport?.addEventListener("touchstart", onTouchStart, { passive: false });
+    viewport?.addEventListener("touchmove", onTouchMove, { passive: false });
+    viewport?.addEventListener("touchend", onTouchEnd);
     viewport?.addEventListener("touchstart", onTouchStart, { passive: false });
     viewport?.addEventListener("touchmove", onTouchMove, { passive: false });
     viewport?.addEventListener("touchend", onTouchEnd);
@@ -276,7 +316,7 @@ export default function Home() {
     close?.addEventListener("click", hide);
     overlay.addEventListener("click", (event) => { if (event.target === overlay) hide(); });
     actions.append(button);
-    return () => { viewport?.removeEventListener("touchstart", onTouchStart); viewport?.removeEventListener("touchmove", onTouchMove); viewport?.removeEventListener("touchend", onTouchEnd); button.remove(); overlay.remove(); };
+    return () => { viewport?.removeEventListener("wheel", onWheel); viewport?.removeEventListener("pointerdown", onPointerDown); viewport?.removeEventListener("pointermove", onPointerMove); viewport?.removeEventListener("pointerup", onPointerUp); viewport?.removeEventListener("touchstart", onTouchStart); viewport?.removeEventListener("touchmove", onTouchMove); viewport?.removeEventListener("touchend", onTouchEnd); button.remove(); overlay.remove(); };
   }, [status]);
 
   if (status !== "authenticated") return <LoginScreen />;
