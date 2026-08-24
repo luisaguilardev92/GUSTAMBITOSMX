@@ -260,7 +260,7 @@ export default function Home() {
       panY = Math.max(-maxY, Math.min(maxY, panY));
     };
     const renderMap = () => { if (!canvas) return; clampPan(); canvas.style.width = "100%"; canvas.style.transform = `translate3d(${panX}px, ${panY}px, 0) scale(${zoom})`; canvas.style.setProperty("--map-marker-scale", String(1 / zoom)); };
-    const setZoom = (next: number) => { zoom = Math.max(0.75, Math.min(4.5, next)); renderMap(); };
+    const setZoom = (next: number) => { zoom = Math.max(0.75, Math.min(8, next)); renderMap(); };
     const getPinchDistance = (touches: TouchList) => Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY);
     const onTouchStart = (event: TouchEvent) => {
       if (event.touches.length === 2) { pinchDistance = getPinchDistance(event.touches); lastTouchX = (event.touches[0].clientX + event.touches[1].clientX) / 2; lastTouchY = (event.touches[0].clientY + event.touches[1].clientY) / 2; event.preventDefault(); }
