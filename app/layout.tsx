@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import Providers from "./providers";
 
@@ -46,16 +45,15 @@ export default function RootLayout({
     <html lang="es">
       <head>
         <meta name="google-adsense-account" content="ca-pub-6031149278839" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6031149278839"
+          crossOrigin="anonymous"
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6031149278839"
-          crossOrigin="anonymous"
-          strategy="beforeInteractive"
-        />
         <Providers>{children}</Providers>
       </body>
     </html>
