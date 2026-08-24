@@ -224,7 +224,7 @@ export default function Home() {
       "luxe-torso": "https://i0.wp.com/www.gamerfocus.co/wp-content/uploads/2026/08/Fortnite_20260820074159.jpg?resize=1024%2C576&ssl=1",
       "luxe-legs": "https://i0.wp.com/www.gamerfocus.co/wp-content/uploads/2026/08/Fortnite_20260820074256.jpg?resize=1024%2C576&ssl=1",
       "luxe-hat": "https://i0.wp.com/www.gamerfocus.co/wp-content/uploads/2026/08/Fortnite_20260820074241.jpg?resize=1024%2C576&ssl=1",
-      "ruby-torso": "https://i0.wp.com/www.gamerfocus.co/wp-content/uploads/2026/08/Fortnite_20260820083430.jpg?resize=1024%2C576&ssl=1",
+      "ruby-torso": "/Fortnite_20260820083430-scaled.webp",
       "ruby-legs": "https://i0.wp.com/www.gamerfocus.co/wp-content/uploads/2026/08/Fortnite_20260820083332.jpg?resize=1024%2C576&ssl=1",
       "ruby-hat": "https://i0.wp.com/www.gamerfocus.co/wp-content/uploads/2026/08/Fortnite_20260820082834.jpg?resize=1024%2C576&ssl=1",
       "ruby-accessory": "https://i0.wp.com/www.gamerfocus.co/wp-content/uploads/2026/08/Fortnite_20260820083357.jpg?resize=1024%2C576&ssl=1",
