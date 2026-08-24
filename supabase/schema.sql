@@ -75,7 +75,10 @@ insert into public.fortnite_codes (code, reward) values
   ('CHISPAMBO', '2,000 Polvo de Espíritu'),
   ('ABGESTAUBT', '2,000 Polvo de Espíritu'),
   ('LETSBLOCKANDROLL', 'Transformación temporal a bloque de Tetris en el lobby · Reutilizable'),
-  ('DONTBLOCKME', 'Transformación temporal a bloque de Tetris en el lobby · Reutilizable')
+  ('DONTBLOCKME', 'Transformación temporal a bloque de Tetris en el lobby · Reutilizable'),
+  ('JONESYISGOLDEN', 'Sprite Jonesy dorado · Si ya lo tienes: 10,000 Polvo de Espíritu'),
+  ('h0p0nvc', '2,000 Polvo de Espíritu · Los 0 son ceros'),
+  ('GATHERANDCRAFT', 'Sprite Bush Cheat Master · Requiere completar la misión Get Crafty 5/5')
 on conflict (code) do update set reward = excluded.reward, updated_at = now();
 
 drop policy if exists "realtime can read progress" on public.gustambito_progress;
