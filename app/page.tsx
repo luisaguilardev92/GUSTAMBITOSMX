@@ -172,7 +172,8 @@ export default function Home() {
     const list = overlay.querySelector<HTMLElement>(".codes-list");
     const renderCodes = (codes: { id: number; code: string; reward: string }[]) => {
       if (!list) return;
-      list.innerHTML = codes.length ? codes.map(({ id, code, reward }) => `<article class="code-card" data-code-id="${id}"><div class="code-value">${code}</div><strong>${reward}</strong></article>`).join("") : `<div class="codes-empty"><span>∅</span><h3>NO HAY CÓDIGOS ACTIVOS</h3></div>`;
+      const orderedCodes = [...codes].sort((a, b) => Number(usedCodes.has(a.id)) - Number(usedCodes.has(b.id)));
+      list.innerHTML = orderedCodes.length ? orderedCodes.map(({ id, code, reward }) => `<article class="code-card" data-code-id="${id}"><div class="code-value">${code}</div><strong>${reward}</strong></article>`).join("") : `<div class="codes-empty"><span>∅</span><h3>NO HAY CÓDIGOS ACTIVOS</h3></div>`;
       list.querySelectorAll<HTMLElement>(".code-card").forEach((card) => {
         const code = card.querySelector(".code-value")?.textContent?.trim() || "";
         const codeId = Number(card.dataset.codeId);
@@ -181,7 +182,7 @@ export default function Home() {
         card.querySelector(".code-value")?.after(copy);
         const mark = document.createElement("button"); mark.className = "code-used"; mark.type = "button";
         const update = () => { const used = usedCodes.has(codeId); card.classList.toggle("used", used); mark.textContent = used ? "✓ USADO" : "MARCAR COMO USADO"; };
-        mark.onclick = async () => { const nextUsed = !usedCodes.has(codeId); nextUsed ? usedCodes.add(codeId) : usedCodes.delete(codeId); update(); const response = await fetch("/api/codes", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ codeId, used: nextUsed }) }); if (!response.ok) { nextUsed ? usedCodes.delete(codeId) : usedCodes.add(codeId); update(); toast.textContent = "NO SE PUDO GUARDAR"; } else toast.textContent = nextUsed ? "CÓDIGO MARCADO" : "MARCA QUITADA"; toast.classList.add("show"); window.setTimeout(() => toast.classList.remove("show"), 1500); };
+        mark.onclick = async () => { const nextUsed = !usedCodes.has(codeId); nextUsed ? usedCodes.add(codeId) : usedCodes.delete(codeId); update(); const response = await fetch("/api/codes", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ codeId, used: nextUsed }) }); if (!response.ok) { nextUsed ? usedCodes.delete(codeId) : usedCodes.add(codeId); update(); toast.textContent = "NO SE PUDO GUARDAR"; } else { nextUsed ? list?.append(card) : list?.prepend(card); toast.textContent = nextUsed ? "CÓDIGO MARCADO" : "MARCA QUITADA"; } toast.classList.add("show"); window.setTimeout(() => toast.classList.remove("show"), 1500); };
         card.append(mark); update();
       });
     };
