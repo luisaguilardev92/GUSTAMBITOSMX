@@ -281,13 +281,16 @@ export default function Home() {
     };
     const onTouchEnd = () => { pinchDistance = 0; dragging = false; };
     const onWheel = (event: WheelEvent) => { event.preventDefault(); setZoom(zoom + (event.deltaY < 0 ? 0.25 : -0.25)); };
-    const onPointerDown = (event: PointerEvent) => { if (event.pointerType === "mouse" && zoom > 1) { dragging = true; lastTouchX = event.clientX; lastTouchY = event.clientY; viewport?.setPointerCapture(event.pointerId); } };
+    const onPointerDown = (event: PointerEvent) => { if (event.pointerType === "mouse" && zoom > 1 && !(event.target as HTMLElement).closest(".map-marker")) { dragging = true; lastTouchX = event.clientX; lastTouchY = event.clientY; viewport?.setPointerCapture(event.pointerId); event.preventDefault(); } };
     const onPointerMove = (event: PointerEvent) => { if (!dragging || event.pointerType !== "mouse") return; panX += event.clientX - lastTouchX; panY += event.clientY - lastTouchY; lastTouchX = event.clientX; lastTouchY = event.clientY; renderMap(); };
-    const onPointerUp = () => { dragging = false; };
+    const onPointerUp = (event?: PointerEvent) => { dragging = false; if (event && viewport?.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId); };
     viewport?.addEventListener("wheel", onWheel, { passive: false });
     viewport?.addEventListener("pointerdown", onPointerDown);
     viewport?.addEventListener("pointermove", onPointerMove);
     viewport?.addEventListener("pointerup", onPointerUp);
+    viewport?.addEventListener("pointercancel", onPointerUp);
+    window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
     viewport?.addEventListener("touchstart", onTouchStart, { passive: false });
     viewport?.addEventListener("touchmove", onTouchMove, { passive: false });
     viewport?.addEventListener("touchend", onTouchEnd);
@@ -316,7 +319,7 @@ export default function Home() {
     close?.addEventListener("click", hide);
     overlay.addEventListener("click", (event) => { if (event.target === overlay) hide(); });
     actions.append(button);
-    return () => { viewport?.removeEventListener("wheel", onWheel); viewport?.removeEventListener("pointerdown", onPointerDown); viewport?.removeEventListener("pointermove", onPointerMove); viewport?.removeEventListener("pointerup", onPointerUp); viewport?.removeEventListener("touchstart", onTouchStart); viewport?.removeEventListener("touchmove", onTouchMove); viewport?.removeEventListener("touchend", onTouchEnd); button.remove(); overlay.remove(); };
+    return () => { viewport?.removeEventListener("wheel", onWheel); viewport?.removeEventListener("pointerdown", onPointerDown); viewport?.removeEventListener("pointermove", onPointerMove); viewport?.removeEventListener("pointerup", onPointerUp); viewport?.removeEventListener("pointercancel", onPointerUp); window.removeEventListener("pointerup", onPointerUp); window.removeEventListener("pointercancel", onPointerUp); viewport?.removeEventListener("touchstart", onTouchStart); viewport?.removeEventListener("touchmove", onTouchMove); viewport?.removeEventListener("touchend", onTouchEnd); button.remove(); overlay.remove(); };
   }, [status]);
 
   if (status !== "authenticated") return <LoginScreen />;
