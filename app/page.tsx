@@ -184,11 +184,10 @@ export default function Home() {
     toast.textContent = "CÓDIGO COPIADO";
     document.body.append(toast);
     const list = overlay.querySelector<HTMLElement>(".codes-list");
-    const renderCodes = (codes: { id: number; code: string; reward: string; category?: string }[]) => {
+    const renderCodes = (codes: { id: number; code: string; reward: string }[]) => {
       if (!list) return;
       const orderedCodes = [...codes].sort((a, b) => Number(usedCodes.has(a.id)) - Number(usedCodes.has(b.id)));
-      const groups = orderedCodes.reduce<Record<string, typeof orderedCodes>>((all, code) => { const category = code.category || "OTROS"; (all[category] ||= []).push(code); return all; }, {});
-      list.innerHTML = orderedCodes.length ? Object.entries(groups).map(([category, entries]) => `<section class="code-group"><h3>${category}</h3>${entries.map(({ id, code, reward }) => `<article class="code-card" data-code-id="${id}"><div class="code-value">${code}</div><strong>${reward}</strong></article>`).join("")}</section>`).join("") : `<div class="codes-empty"><span>∅</span><h3>NO HAY CÓDIGOS ACTIVOS</h3></div>`;
+      list.innerHTML = orderedCodes.length ? orderedCodes.map(({ id, code, reward }) => `<article class="code-card" data-code-id="${id}"><div class="code-value">${code}</div><strong>${reward}</strong></article>`).join("") : `<div class="codes-empty"><span>∅</span><h3>NO HAY CÓDIGOS ACTIVOS</h3></div>`;
       list.querySelectorAll<HTMLElement>(".code-card").forEach((card) => {
         const code = card.querySelector(".code-value")?.textContent?.trim() || "";
         const codeId = Number(card.dataset.codeId);

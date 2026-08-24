@@ -8,7 +8,7 @@ export const GET = auth(async (request) => {
   if (!email) return Response.json({ error: "No autorizado" }, { status: 401 });
   if (!supabase) return Response.json({ error: "Supabase no configurado" }, { status: 503 });
   const [{ data: codes, error: codesError }, { data: used, error: usedError }] = await Promise.all([
-    supabase.from("fortnite_codes").select("id, code, reward, category").eq("active", true).order("created_at", { ascending: true }),
+    supabase.from("fortnite_codes").select("id, code, reward").eq("active", true).order("created_at", { ascending: true }),
     supabase.from("user_used_fortnite_codes").select("code_id").eq("email", email),
   ]);
   if (codesError || usedError) return Response.json({ error: codesError?.message || usedError?.message }, { status: 500 });
