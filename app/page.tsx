@@ -222,6 +222,14 @@ export default function Home() {
     const setZoom = (next: number) => { zoom = Math.max(.75, Math.min(2.5, next)); if (canvas) { canvas.style.width = `${zoom * 100}%`; canvas.style.setProperty("--map-marker-scale", String(1 / zoom)); } };
     const viewport = overlay.querySelector<HTMLElement>(".map-viewport");
     viewport?.addEventListener("wheel", (event) => { event.preventDefault(); setZoom(zoom + (event.deltaY < 0 ? .15 : -.15)); }, { passive: false });
+    let pinchDistance = 0;
+    const getPinchDistance = (touches: TouchList) => Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY);
+    const onTouchStart = (event: TouchEvent) => { if (event.touches.length === 2) { pinchDistance = getPinchDistance(event.touches); event.preventDefault(); } };
+    const onTouchMove = (event: TouchEvent) => { if (event.touches.length !== 2 || !pinchDistance) return; const nextDistance = getPinchDistance(event.touches); setZoom(zoom * (nextDistance / pinchDistance)); pinchDistance = nextDistance; event.preventDefault(); };
+    const onTouchEnd = () => { pinchDistance = 0; };
+    viewport?.addEventListener("touchstart", onTouchStart, { passive: false });
+    viewport?.addEventListener("touchmove", onTouchMove, { passive: false });
+    viewport?.addEventListener("touchend", onTouchEnd);
     overlay.querySelectorAll<HTMLButtonElement>("[data-map-filter]").forEach((filterButton) => filterButton.addEventListener("click", () => { const filter = filterButton.dataset.mapFilter || "all"; overlay.querySelectorAll<HTMLButtonElement>("[data-map-filter]").forEach((entry) => entry.classList.toggle("active", entry === filterButton)); overlay.querySelectorAll<HTMLElement>(".map-marker").forEach((marker) => marker.classList.toggle("hidden", filter !== "all" && !marker.dataset.mapKind?.includes(filter))); }));
     const mapStatus = overlay.querySelector<HTMLElement>("[data-map-status]");
     const setCollected = (marker: HTMLElement, collected: boolean) => marker.classList.toggle("collected", collected);
@@ -233,7 +241,7 @@ export default function Home() {
     close?.addEventListener("click", hide);
     overlay.addEventListener("click", (event) => { if (event.target === overlay) hide(); });
     actions.append(button);
-    return () => { button.remove(); overlay.remove(); };
+    return () => { viewport?.removeEventListener("touchstart", onTouchStart); viewport?.removeEventListener("touchmove", onTouchMove); viewport?.removeEventListener("touchend", onTouchEnd); button.remove(); overlay.remove(); };
   }, [status]);
 
   if (status !== "authenticated") return <LoginScreen />;
