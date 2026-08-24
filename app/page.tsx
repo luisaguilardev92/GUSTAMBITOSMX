@@ -264,7 +264,7 @@ export default function Home() {
     const getPinchDistance = (touches: TouchList) => Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY);
     const onTouchStart = (event: TouchEvent) => {
       if (event.touches.length === 2) { pinchDistance = getPinchDistance(event.touches); lastTouchX = (event.touches[0].clientX + event.touches[1].clientX) / 2; lastTouchY = (event.touches[0].clientY + event.touches[1].clientY) / 2; event.preventDefault(); }
-      else if (event.touches.length === 1 && zoom > 1) { dragging = true; lastTouchX = event.touches[0].clientX; lastTouchY = event.touches[0].clientY; event.preventDefault(); }
+      else if (event.touches.length === 1 && zoom > 1 && !(event.target as HTMLElement).closest(".map-marker")) { dragging = true; lastTouchX = event.touches[0].clientX; lastTouchY = event.touches[0].clientY; }
     };
     const onTouchMove = (event: TouchEvent) => {
       if (event.touches.length === 2 && pinchDistance) {
