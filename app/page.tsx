@@ -197,6 +197,44 @@ export default function Home() {
     return () => { button.remove(); overlay.remove(); toast.remove(); };
   }, [status]);
 
+  useEffect(() => {
+    const actions = document.querySelector(".top-actions");
+    if (!actions || document.querySelector(".map-button")) return;
+    const button = document.createElement("button");
+    button.className = "map-button";
+    button.textContent = "MAPA";
+    const overlay = document.createElement("div");
+    overlay.className = "map-overlay";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-label", "Mapa de Fortnite Override");
+    const markers = [
+      { x: 25, y: 50, name: "Green Hill Zone", kind: "wrixel cheat", detail: "Wrixel · Drift · Cheat Codes" },
+      { x: 77, y: 91, name: "Cluster Coast", kind: "wrixel cheat", detail: "Wrixel · Luxe · zona de alta densidad" },
+      { x: 52, y: 80, name: "Mega Maze", kind: "wrixel cheat", detail: "Wrixel · Skull Ranger · Cheat Codes" },
+      { x: 37, y: 33, name: "The Battlewoods", kind: "wrixel cheat", detail: "Wrixel · Ruby · Cheat Codes" },
+      { x: 60, y: 50, name: "Reality's Reign", kind: "cheat", detail: "Zona de alta densidad de Cheat Codes" },
+      { x: 13, y: 75, name: "Heatwave Harbor", kind: "cheat", detail: "Zona de alta densidad de Cheat Codes" },
+      { x: 68, y: 74, name: "Shaken Sanctuary", kind: "cheat", detail: "Cheat Codes · Wrixel NPC al noroeste" },
+    ];
+    overlay.innerHTML = `<div class="map-panel"><button class="map-close" aria-label="Cerrar">×</button><div class="map-heading"><div><p class="eyebrow">GLITCH · ISLA OVERRIDE</p><h2>MAPA</h2><p>Ubica las piezas de Wrixel y las zonas con Cheat Codes.</p></div><div class="map-controls"><button data-map-filter="all" class="active">TODOS</button><button data-map-filter="wrixel">WRIXEL</button><button data-map-filter="cheat">CHEAT CODES</button></div></div><div class="map-tools"><button data-map-zoom="out" aria-label="Alejar">−</button><span data-map-zoom-label>100%</span><button data-map-zoom="in" aria-label="Acercar">+</button><button data-map-zoom="reset">RECENTRAR</button></div><div class="map-viewport"><div class="map-canvas"><img src="https://fortnite-api.com/images/map.png" alt="Mapa de la isla Fortnite Override" /><div class="map-markers">${markers.map((marker) => `<button class="map-marker ${marker.kind}" data-map-kind="${marker.kind}" style="left:${marker.x}%;top:${marker.y}%"><span class="map-marker-dot">${marker.kind.includes("wrixel") ? "W" : "⌖"}</span><strong>${marker.name}</strong><small>${marker.detail}</small></button>`).join("")}</div></div></div><div class="map-legend"><span><i class="legend-wrixel">W</i> PIEZAS DE WRIXEL</span><span><i class="legend-cheat">⌖</i> ZONA CHEAT CODE</span><small>Mapa base: Fortnite-API · puntos orientativos por zona</small></div></div>`;
+    document.body.append(overlay);
+    const canvas = overlay.querySelector<HTMLElement>(".map-canvas");
+    const zoomLabel = overlay.querySelector<HTMLElement>("[data-map-zoom-label]");
+    let zoom = 1;
+    const setZoom = (next: number) => { zoom = Math.max(.75, Math.min(2.5, next)); if (canvas) canvas.style.width = `${zoom * 100}%`; if (zoomLabel) zoomLabel.textContent = `${Math.round(zoom * 100)}%`; };
+    overlay.querySelector<HTMLButtonElement>('[data-map-zoom="out"]')?.addEventListener("click", () => setZoom(zoom - .25));
+    overlay.querySelector<HTMLButtonElement>('[data-map-zoom="in"]')?.addEventListener("click", () => setZoom(zoom + .25));
+    overlay.querySelector<HTMLButtonElement>('[data-map-zoom="reset"]')?.addEventListener("click", () => setZoom(1));
+    overlay.querySelectorAll<HTMLButtonElement>("[data-map-filter]").forEach((filterButton) => filterButton.addEventListener("click", () => { const filter = filterButton.dataset.mapFilter || "all"; overlay.querySelectorAll<HTMLButtonElement>("[data-map-filter]").forEach((entry) => entry.classList.toggle("active", entry === filterButton)); overlay.querySelectorAll<HTMLElement>(".map-marker").forEach((marker) => marker.classList.toggle("hidden", filter !== "all" && !marker.dataset.mapKind?.includes(filter))); }));
+    const close = overlay.querySelector(".map-close");
+    const hide = () => overlay.classList.remove("open");
+    button.onclick = () => overlay.classList.add("open");
+    close?.addEventListener("click", hide);
+    overlay.addEventListener("click", (event) => { if (event.target === overlay) hide(); });
+    actions.append(button);
+    return () => { button.remove(); overlay.remove(); };
+  }, [status]);
+
   if (status !== "authenticated") return <LoginScreen />;
 
   return <main className="shell">
