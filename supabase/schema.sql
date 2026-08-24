@@ -50,10 +50,20 @@ create table if not exists public.user_used_fortnite_codes (
   primary key (email, code_id)
 );
 
+create table if not exists public.user_wrixel_parts (
+  email text not null references public.user_profiles(email) on delete cascade,
+  part_key text not null,
+  collected boolean not null default true,
+  updated_at timestamptz not null default now(),
+  primary key (email, part_key)
+);
+
 alter table public.fortnite_codes enable row level security;
 alter table public.user_used_fortnite_codes enable row level security;
+alter table public.user_wrixel_parts enable row level security;
 
 grant select, insert, update, delete on public.fortnite_codes, public.user_used_fortnite_codes to service_role;
+grant select, insert, update, delete on public.user_wrixel_parts to service_role;
 grant usage, select on sequence public.fortnite_codes_id_seq to service_role;
 
 insert into public.fortnite_codes (code, reward) values
@@ -89,7 +99,7 @@ create policy "realtime can read progress"
   using (true);
 
 grant usage on schema public to service_role;
-grant select, insert, update, delete on public.user_profiles, public.gustambito_progress, public.user_friends, public.fortnite_codes, public.user_used_fortnite_codes to service_role;
+grant select, insert, update, delete on public.user_profiles, public.gustambito_progress, public.user_friends, public.fortnite_codes, public.user_used_fortnite_codes, public.user_wrixel_parts to service_role;
 grant select on public.gustambito_progress to anon, authenticated;
 drop trigger if exists gustambito_progress_broadcast on public.gustambito_progress;
 drop function if exists public.broadcast_gustambito_progress();
