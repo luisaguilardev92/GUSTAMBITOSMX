@@ -68,26 +68,28 @@ grant select, insert, update, delete on public.user_wrixel_parts to service_role
 grant usage, select on sequence public.fortnite_codes_id_seq to service_role;
 
 insert into public.fortnite_codes (code, reward) values
-  ('OVERRIDEXP', '40,000 PE', 'CÓDIGOS DE PE'),
-  ('PERLIMPINPIN', '2,000 Polvo de Espíritus', 'CÓDIGOS DE POLVO DE ESPÍRITUS'),
-  ('CHISPAMBO', '2,000 Polvo de Espíritus', 'CÓDIGOS DE POLVO DE ESPÍRITUS'),
-  ('ABGESTAUBT', '2,000 Polvo de Espíritus', 'CÓDIGOS DE POLVO DE ESPÍRITUS'),
-  ('MAGILUME', 'Polvo de Espíritus infinito… o tal vez no', 'CÓDIGOS DE POLVO DE ESPÍRITUS'),
-  ('O2OVERRIDE', 'Entrega de suministro de llama + 5 Extractores portátiles', 'CÓDIGOS DE ARTILUGIOS'),
-  ('TAKEYOURHEART', '2 Aceleradores de Extracción', 'CÓDIGOS DE ARTILUGIOS'),
-  ('PERFECTORDER', '4 Tacos picantes', 'CÓDIGOS DE ARTILUGIOS'),
-  ('SURVIVETHENIGHT', '2 Localizadores de códigos', 'CÓDIGOS DE ARTILUGIOS'),
-  ('FINDITCHAT', '2 Localizadores de códigos', 'CÓDIGOS DE ARTILUGIOS'),
-  ('BORN2PLAY', 'Espíritu Aventurero hacker (variante)', 'CÓDIGOS DE ESPÍRITUS'),
-  ('8BITBLAST', 'Espíritu de 8 bits hacker (variante)', 'CÓDIGOS DE ESPÍRITUS'),
-  ('IWANNAFLYHIGH', 'Espíritu de Tails hacker (variante)', 'CÓDIGOS DE ESPÍRITUS'),
-  ('GOTTAGOFAST', 'Espíritu de Sonic hacker (variante)', 'CÓDIGOS DE ESPÍRITUS'),
-  ('PLAY4ALL', 'Espíritu de Jonesy hacker (variante)', 'CÓDIGOS DE ESPÍRITUS'),
-  ('GATHERANDCRAFT', 'Espíritu de Arbustín hacker (variante). Puede requerir completar la primera tanda de Historia.', 'CÓDIGOS DE ESPÍRITUS'),
-  ('BEMOREALIEN', 'Pantalla de carga “Glitch activo”', 'CÓDIGOS DE COSMÉTICOS'),
-  ('REACHYOURIMPOSSIBLE', 'Pantalla de carga “Fiesta de Bloques”', 'CÓDIGOS DE COSMÉTICOS'),
-  ('LETSBLOCKANDROLL', 'Transformación en bloque de Tetris en el lobby', 'CÓDIGOS DE EFECTOS DE SALA DE ESPERA'),
-  ('DONTBLOCKME', 'Transformación en bloque de Tetris en el lobby', 'CÓDIGOS DE EFECTOS DE SALA DE ESPERA')
+  ('OVERRIDEXP', '40,000 PE'),
+  ('PERLIMPINPIN', '2,000 Polvo de Espíritus'),
+  ('CHISPAMBO', '2,000 Polvo de Espíritus'),
+  ('ABGESTAUBT', '2,000 Polvo de Espíritus'),
+  ('MAGILUME', 'Polvo de Espíritus infinito… o tal vez no'),
+  ('O2OVERRIDE', 'Entrega de suministro de llama + 5 Extractores portátiles'),
+  ('TAKEYOURHEART', '2 Aceleradores de Extracción'),
+  ('PERFECTORDER', '4 Tacos picantes'),
+  ('SURVIVETHENIGHT', '2 Localizadores de códigos'),
+  ('FINDITCHAT', '2 Localizadores de códigos'),
+  ('BORN2PLAY', 'Espíritu Aventurero hacker (variante)'),
+  ('8BITBLAST', 'Espíritu de 8 bits hacker (variante)'),
+  ('IWANNAFLYHIGH', 'Espíritu de Tails hacker (variante)'),
+  ('GOTTAGOFAST', 'Espíritu de Sonic hacker (variante)'),
+  ('PLAY4ALL', 'Espíritu de Jonesy hacker (variante)'),
+  ('GATHERANDCRAFT', 'Espíritu de Arbustín hacker (variante). Puede requerir completar la primera tanda de Historia.'),
+  ('BEMOREALIEN', 'Pantalla de carga “Glitch activo”'),
+  ('REACHYOURIMPOSSIBLE', 'Pantalla de carga “Fiesta de Bloques”'),
+  ('LETSBLOCKANDROLL', 'Transformación en bloque de Tetris en el lobby'),
+  ('DONTBLOCKME', 'Transformación en bloque de Tetris en el lobby'),
+  ('JONESYISGOLDEN', 'Espíritu Jonesy dorado (variante)'),
+  ('h0p0nvc', '2,000 Polvo de Espíritus · Los 0 son ceros')
 on conflict (code) do nothing;
 
 drop policy if exists "realtime can read progress" on public.gustambito_progress;
