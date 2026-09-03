@@ -11,9 +11,13 @@ type VariantCard = { item: Gustambito; variant: Variant; variantIndex: number };
 type Friend = { email: string; name: string | null; image: string | null; friend_code: string; progress: { gustambito_id: number; variant_label: string; level: number }[] };
 
 const spriteUrl = (key: string, variant = "") => `https://fortnite.gg/img/x/sprites/icons/T_Icon_BR_Creature_Sprite_${key}${variant ? `_${variant}` : ""}_L.webp`;
-const makeVariants = (key: string, levels: number[] = [0, 0, 0], variantKeys: [string, string][] = [["Base", ""], ["Dorado", "Gold"], ["Cheat Master", "Cheatmaster"]]): Variant[] => variantKeys.map(([label, suffix], index) => ({ label, image: spriteUrl(key, suffix), level: levels[index] ?? 0 }));
+const makeVariants = (key: string, levels: number[] = [0, 0, 0], variantKeys: [string, string][] = [["Base", ""], ["Cheat Master", "Cheatmaster"], ["Dorado", "Gold"]]): Variant[] => variantKeys.map(([label, suffix], index) => ({ label, image: spriteUrl(key, suffix), level: levels[index] ?? 0 }));
 const withLootHacker = (key: string, variants: Variant[], available = false): Variant[] => [...variants, { label: "Loot Hacker", image: spriteUrl(key, "Hacker"), level: 0, available }];
 const initialGustambitos: Gustambito[] = [
+  { id: 13, name: "Overshield", subtitle: "Otorga escudo adicional según el nivel", rarity: "Raro", color: "#68d8ee", image: spriteUrl("Overshield"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Overshield", makeVariants("Overshield")) },
+  { id: 14, name: "Mega Man", subtitle: "Se desliza con menos fricción", rarity: "Raro", color: "#4c9bf5", image: spriteUrl("ImprovedSlide"), season: "GLITCH · Capítulo 7", variants: makeVariants("ImprovedSlide", [0], [["Base", ""]]) },
+  { id: 15, name: "X-Ray", subtitle: "Marca enemigos cercanos periódicamente", rarity: "Épico", color: "#f0d94d", image: spriteUrl("WinnerB"), season: "GLITCH · Capítulo 7", variants: withLootHacker("WinnerB", makeVariants("WinnerB")) },
+  { id: 16, name: "Onigiri", subtitle: "Activa Overdrive al consumir", rarity: "Raro", color: "#f29a5b", image: spriteUrl("WinnerC"), season: "GLITCH · Capítulo 7", variants: withLootHacker("WinnerC", makeVariants("WinnerC")) },
   { id: 1, name: "Jackrabbit", subtitle: "Salta más lejos", rarity: "Raro", color: "#8ed35b", image: spriteUrl("JazzJackrabbit"), season: "GLITCH · Capítulo 7", variants: withLootHacker("DoubleJump", makeVariants("JazzJackrabbit")) },
   { id: 2, name: "Shadow", subtitle: "Se mueve entre las sombras", rarity: "Épico", color: "#5b4e74", image: spriteUrl("NarrowFlea_Scribe"), season: "GLITCH · Capítulo 7", variants: withLootHacker("ReloadOverTime", makeVariants("NarrowFlea_Scribe")) },
   { id: 3, name: "Bush", subtitle: "Se camufla en la isla", rarity: "Raro", color: "#79c85b", image: spriteUrl("BushRanger"), season: "GLITCH · Capítulo 7", variants: withLootHacker("BushRanger", makeVariants("BushRanger")) },
@@ -23,13 +27,9 @@ const initialGustambitos: Gustambito[] = [
   { id: 7, name: "Klombo", subtitle: "El gigante amistoso", rarity: "Mítico", color: "#ef63c4", image: spriteUrl("Klombo"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Klombo", makeVariants("Klombo")) },
   { id: 8, name: "Jonesy", subtitle: "El héroe de siempre", rarity: "Épico", color: "#ef7b5b", image: spriteUrl("Jonesy"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Jonesy", makeVariants("Jonesy")) },
   { id: 9, name: "Sonic", subtitle: "Corre a velocidad sónica", rarity: "Mítico", color: "#55b7ed", image: spriteUrl("NarrowFlea_Obsidian"), season: "GLITCH · Capítulo 7", variants: withLootHacker("NarrowFlea", makeVariants("NarrowFlea_Obsidian")) },
-  { id: 10, name: "Crown", subtitle: "Realeza en el lobby", rarity: "Mítico", color: "#e6534e", image: spriteUrl("Crown"), season: "GLITCH · Capítulo 7", variants: makeVariants("Crown", [0, 0, 0], [["Base", ""], ["Dorado", "Gold"], ["Cheat Master", "Cheatmaster"]]).concat({ label: "Loot Hacker", image: spriteUrl("Crown", "Hacker"), level: 0, available: true }) },
+  { id: 10, name: "Crown", subtitle: "Realeza en el lobby", rarity: "Mítico", color: "#e6534e", image: spriteUrl("Crown"), season: "GLITCH · Capítulo 7", variants: makeVariants("Crown", [0, 0, 0], [["Base", ""], ["Cheat Master", "Cheatmaster"], ["Dorado", "Gold"]]).concat({ label: "Loot Hacker", image: spriteUrl("Crown", "Hacker"), level: 0, available: true }) },
   { id: 11, name: "8-Bit", subtitle: "Directo desde el arcade", rarity: "Épico", color: "#e86552", image: spriteUrl("EightBitBlaster"), season: "GLITCH · Capítulo 7", variants: withLootHacker("EightBitBlaster", makeVariants("EightBitBlaster")) },
   { id: 12, name: "Storm Scout", subtitle: "Descubre el siguiente círculo", rarity: "Raro", color: "#a775dd", image: spriteUrl("StormScout"), season: "GLITCH · Capítulo 7", variants: makeVariants("StormScout") },
-  { id: 13, name: "Overshield", subtitle: "Otorga escudo adicional según el nivel", rarity: "Raro", color: "#68d8ee", image: spriteUrl("Overshield"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Overshield", makeVariants("Overshield")) },
-  { id: 14, name: "Mega Man", subtitle: "Se desliza con menos fricción", rarity: "Raro", color: "#4c9bf5", image: spriteUrl("ImprovedSlide"), season: "GLITCH · Capítulo 7", variants: makeVariants("ImprovedSlide", [0], [["Base", ""]]) },
-  { id: 15, name: "X-Ray", subtitle: "Marca enemigos cercanos periódicamente", rarity: "Épico", color: "#f0d94d", image: spriteUrl("WinnerB"), season: "GLITCH · Capítulo 7", variants: withLootHacker("WinnerB", makeVariants("WinnerB")) },
-  { id: 16, name: "Onigiri", subtitle: "Activa Overdrive al consumir", rarity: "Raro", color: "#f29a5b", image: spriteUrl("WinnerC"), season: "GLITCH · Capítulo 7", variants: withLootHacker("WinnerC", makeVariants("WinnerC")) },
 ];
 
 const wrixelStyles = [
