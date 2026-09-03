@@ -29,7 +29,7 @@ const initialGustambitos: Gustambito[] = [
   { id: 13, name: "Protector", subtitle: "Otorga escudo adicional según el nivel", rarity: "Raro", color: "#68d8ee", image: spriteUrl("Overshield"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Overshield", makeVariants("Overshield")) },
   { id: 15, name: "Rayos X", subtitle: "Marca enemigos cercanos periódicamente", rarity: "Épico", color: "#f0d94d", image: spriteUrl("WinnerB"), season: "GLITCH · Capítulo 7", variants: withLootHacker("WinnerB", makeVariants("WinnerB")) },
   { id: 16, name: "Onigiri", subtitle: "Activa Overdrive al consumir", rarity: "Raro", color: "#f29a5b", image: spriteUrl("WinnerC"), season: "GLITCH · Capítulo 7", variants: withLootHacker("WinnerC", makeVariants("WinnerC")) },
-  { id: 12, name: "Exploratormentas", subtitle: "Descubre el siguiente círculo", rarity: "Raro", color: "#a775dd", image: spriteUrl("StormScout"), season: "GLITCH · Capítulo 7", variants: makeVariants("StormScout") },
+  { id: 12, name: "Exploratormentas", subtitle: "Descubre el siguiente círculo", rarity: "Raro", color: "#a775dd", image: spriteUrl("StormScout"), season: "GLITCH · Capítulo 7", variants: withLootHacker("StormScout", makeVariants("StormScout")) },
 ];
 
 const wrixelStyles = [
