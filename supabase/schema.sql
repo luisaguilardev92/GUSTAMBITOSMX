@@ -89,7 +89,10 @@ insert into public.fortnite_codes (code, reward) values
   ('LETSBLOCKANDROLL', 'Transformación en bloque de Tetris en el lobby'),
   ('DONTBLOCKME', 'Transformación en bloque de Tetris en el lobby'),
   ('JONESYISGOLDEN', 'Espíritu Jonesy dorado (variante)'),
-  ('h0p0nvc', '2,000 Polvo de Espíritus · Los 0 son ceros')
+  ('h0p0nvc', '2,000 Polvo de Espíritus · Los 0 son ceros'),
+  ('INVALIDCHEAT', '2 Localizadores de códigos'),
+  ('ChatWhereDoYouFindTheKey', '2 Aceleradores de Extracción'),
+  ('YourThoughtsAreMine', '5,000 Polvo de Espíritus · Requiere la misión oculta de Geno')
 on conflict (code) do nothing;
 
 drop policy if exists "realtime can read progress" on public.gustambito_progress;
