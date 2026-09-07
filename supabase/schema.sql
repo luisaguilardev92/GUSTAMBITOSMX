@@ -92,7 +92,12 @@ insert into public.fortnite_codes (code, reward) values
   ('h0p0nvc', '2,000 Polvo de Espíritus · Los 0 son ceros'),
   ('INVALIDCHEAT', '2 Localizadores de códigos'),
   ('ChatWhereDoYouFindTheKey', '2 Aceleradores de Extracción'),
-  ('YourThoughtsAreMine', '5,000 Polvo de Espíritus · Requiere la misión oculta de Geno')
+  ('YourThoughtsAreMine', '5,000 Polvo de Espíritus · Requiere la misión oculta de Geno'),
+  ('DustInTheWind', '5,000 Polvo de Espíritus'),
+  ('WhereIsTheDustyTree', '5,000 Polvo de Espíritus'),
+  ('NOPROLLAMA', '1 suministro de llama'),
+  ('InsertCoinToContinue', 'Transformación temporal en máquina arcade en el lobby'),
+  ('BRB', 'Transformación temporal en baño en el lobby')
 on conflict (code) do nothing;
 
 drop policy if exists "realtime can read progress" on public.gustambito_progress;
