@@ -56,13 +56,15 @@ const loadExportImage = (src: string) => new Promise<HTMLImageElement>((resolve,
 });
 
 async function downloadCollectionImage(items: Gustambito[], friendCode: string) {
-  const cards = items.flatMap((item) => item.variants.map((variant) => ({ item, variant })));
-  const columns = 6;
-  const cellWidth = 190;
-  const cellHeight = 184;
+  const columns = 2;
+  const groupWidth = 580;
+  const groupHeight = 272;
+  const cardWidth = 132;
+  const cardHeight = 204;
+  const cardsPerGroup = 4;
   const canvas = document.createElement("canvas");
-  canvas.width = columns * cellWidth;
-  canvas.height = 190 + Math.ceil(cards.length / columns) * cellHeight + 86;
+  canvas.width = columns * groupWidth;
+  canvas.height = 190 + Math.ceil(items.length / columns) * groupHeight + 86;
   const context = canvas.getContext("2d");
   if (!context) return;
   const background = context.createLinearGradient(0, 0, canvas.width, canvas.height);
@@ -76,44 +78,52 @@ async function downloadCollectionImage(items: Gustambito[], friendCode: string) 
   context.fillStyle = "#fff";
   context.font = "900 32px Arial";
   context.fillText("gustambitosmx.vercel.app", 34, 55);
+  const cards = items.flatMap((item) => item.variants.map((variant) => ({ item, variant })));
   const collected = cards.filter(({ variant }) => variant.level > 0).length;
   const mastered = cards.filter(({ variant }) => variant.level === 5).length;
   context.fillStyle = "#ff36ba";
   context.font = "900 18px Arial";
   context.fillText(`${collected}/${cards.length} CONSEGUIDOS · ${mastered} DOMINADOS`, 36, 105);
   const crown = await loadExportImage("/mastered-crown.png");
-  for (const [index, { item, variant }] of cards.entries()) {
-    const x = (index % columns) * cellWidth + 10;
-    const y = 166 + Math.floor(index / columns) * cellHeight;
-    context.strokeStyle = "rgba(57,232,255,.9)";
-    context.strokeRect(x - 4, y + 3, cellWidth - 20, cellHeight - 12);
-    context.strokeStyle = "rgba(255,54,186,.9)";
-    context.strokeRect(x + 4, y - 3, cellWidth - 20, cellHeight - 12);
-    context.fillStyle = variant.level > 0 ? "#0d3267" : "#101d35";
-    context.fillRect(x, y, cellWidth - 20, cellHeight - 12);
-    context.strokeStyle = variant.level > 0 ? "#277bad" : "#31435d";
-    context.strokeRect(x, y, cellWidth - 20, cellHeight - 12);
-    const sprite = await loadExportImage(variant.image);
-    context.save();
-    context.filter = variant.level === 0 ? "grayscale(1) brightness(.42)" : "none";
-    if (variant.level > 0) {
-      context.globalAlpha = .28;
-      context.filter = "hue-rotate(130deg) saturate(2)";
-      context.drawImage(sprite, x + 31, y + 8, 100, 110);
-      context.globalAlpha = 1;
-      context.filter = "none";
+  for (const [index, item] of items.entries()) {
+    const groupX = (index % columns) * groupWidth + 10;
+    const groupY = 150 + Math.floor(index / columns) * groupHeight;
+    context.fillStyle = "rgba(8,18,53,.92)";
+    context.fillRect(groupX, groupY, groupWidth - 20, groupHeight - 16);
+    context.strokeStyle = "#39e8ff";
+    context.strokeRect(groupX, groupY, groupWidth - 20, groupHeight - 16);
+    context.strokeStyle = "rgba(255,54,186,.8)";
+    context.strokeRect(groupX + 5, groupY - 5, groupWidth - 20, groupHeight - 16);
+    context.fillStyle = "#ffd84d";
+    context.font = "900 16px Arial";
+    context.fillText(item.name.toUpperCase(), groupX + 12, groupY + 25);
+    for (const [variantIndex, variant] of item.variants.slice(0, cardsPerGroup).entries()) {
+      const x = groupX + 10 + variantIndex * (cardWidth + 5);
+      const y = groupY + 42;
+      context.fillStyle = variant.level > 0 ? "#0d3267" : "#101d35";
+      context.fillRect(x, y, cardWidth, cardHeight);
+      context.strokeStyle = variant.level > 0 ? "#277bad" : "#31435d";
+      context.strokeRect(x, y, cardWidth, cardHeight);
+      const sprite = await loadExportImage(variant.image);
+      context.save();
+      context.filter = variant.level === 0 ? "grayscale(1) brightness(.42)" : "none";
+      if (variant.level > 0) {
+        context.globalAlpha = .28;
+        context.filter = "hue-rotate(130deg) saturate(2)";
+        context.drawImage(sprite, x + 18, y + 6, 96, 105);
+        context.globalAlpha = 1;
+        context.filter = "none";
+      }
+      context.drawImage(sprite, x + 20, y + 6, 92, 105);
+      context.restore();
+      if (variant.level === 5) context.drawImage(crown, x + 75, y - 2, 38, 29);
+      context.fillStyle = variant.level > 0 ? "#fff" : "#6d7e9b";
+      context.font = "900 10px Arial";
+      context.fillText(variant.label.toUpperCase(), x + 8, y + 128);
+      context.fillStyle = variant.level > 0 ? "#39e8ff" : "#687a95";
+      context.font = "900 10px Arial";
+      context.fillText(`NIVEL ${variant.level}/5`, x + 8, y + 149);
     }
-    context.drawImage(sprite, x + 35, y + 8, 100, 110);
-    context.restore();
-    if (variant.level === 5) context.drawImage(crown, x + 72, y - 2, 40, 30);
-    context.fillStyle = variant.level > 0 ? "#fff" : "#6d7e9b";
-    context.font = "900 11px Arial";
-    context.fillText(item.name.toUpperCase(), x + 10, y + 133);
-    context.font = "10px Arial";
-    context.fillText(variant.label, x + 10, y + 149);
-    context.fillStyle = variant.level > 0 ? "#39e8ff" : "#687a95";
-    context.font = "900 11px Arial";
-    context.fillText(`NIVEL ${variant.level}/5`, x + 10, y + 166);
   }
   const footerY = canvas.height - 31;
   context.strokeStyle = "#39e8ff";
