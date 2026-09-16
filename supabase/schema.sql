@@ -100,6 +100,16 @@ insert into public.fortnite_codes (code, reward) values
   ('BRB', 'Transformación temporal en baño en el lobby')
 on conflict (code) do nothing;
 
+insert into public.fortnite_codes (code, reward) values
+  ('BeamMeUp', '2 Aceleradores de Extracción'),
+  ('SAYH12WR1X3L', 'Spray “Retrato heroico de Wrixel”')
+on conflict (code) do nothing;
+
+-- Conserva códigos usados e historial; solo deja de ofrecer el código vencido.
+update public.fortnite_codes
+set active = false, updated_at = now()
+where upper(code) = 'NOPROLLAMA' and active;
+
 drop policy if exists "realtime can read progress" on public.gustambito_progress;
 create policy "realtime can read progress"
   on public.gustambito_progress
