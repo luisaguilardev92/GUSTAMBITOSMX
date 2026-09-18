@@ -31,9 +31,9 @@ const initialGustambitos: Gustambito[] = [
   { id: 16, name: "Onigiri", subtitle: "Activa Overdrive al consumir", rarity: "Raro", color: "#f29a5b", image: spriteUrl("WinnerC"), season: "GLITCH · Capítulo 7", variants: withLootHacker("WinnerC", makeVariants("WinnerC")) },
   { id: 12, name: "Exploratormentas", subtitle: "Descubre el siguiente círculo", rarity: "Raro", color: "#a775dd", image: spriteUrl("StormScout"), season: "GLITCH · Capítulo 7", variants: withLootHacker("StormScout", makeVariants("StormScout")) },
   { id: 17, name: "Crash Bandicoot", subtitle: "Un salto desata un torbellino", rarity: "Épico", color: "#f18434", image: spriteUrl("BodySlam"), season: "GLITCH · Capítulo 7", variants: withLootHacker("BodySlam", makeVariants("BodySlam")) },
-  { id: 18, name: "Blinky", subtitle: "Se camufla al recibir daño", rarity: "Épico", color: "#ed4054", image: spriteUrl("Blinky"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Blinky", makeVariants("Blinky")) },
-  { id: 19, name: "Morgana", subtitle: "Mejora la eficacia de curación", rarity: "Épico", color: "#e8e8ef", image: spriteUrl("Morgana"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Morgana", makeVariants("Morgana")) },
-  { id: 20, name: "Pond", subtitle: "Salto súper cargado", rarity: "Épico", color: "#54c58b", image: spriteUrl("Pond"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Pond", makeVariants("Pond")) },
+  { id: 18, name: "Blinky", subtitle: "Se camufla al recibir daño", rarity: "Épico", color: "#ed4054", image: spriteUrl("GhostDamage"), season: "GLITCH · Capítulo 7", variants: withLootHacker("GhostDamage", makeVariants("GhostDamage")) },
+  { id: 19, name: "Morgana", subtitle: "Mejora la eficacia de curación", rarity: "Épico", color: "#e8e8ef", image: spriteUrl("IncreaseHeals"), season: "GLITCH · Capítulo 7", variants: withLootHacker("IncreaseHeals", makeVariants("IncreaseHeals")) },
+  { id: 20, name: "Pond", subtitle: "Salto súper cargado", rarity: "Épico", color: "#54c58b", image: spriteUrl("WinnerA"), season: "GLITCH · Capítulo 7", variants: withLootHacker("WinnerA", makeVariants("WinnerA")) },
   { id: 21, name: "Birthday", subtitle: "Pastel sorpresa en cofres", rarity: "Épico", color: "#f18cc3", image: spriteUrl("Birthday"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Birthday", makeVariants("Birthday")) },
 ];
 
