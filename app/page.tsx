@@ -10,10 +10,7 @@ type Gustambito = { id: number; name: string; subtitle: string; rarity: "Mítico
 type VariantCard = { item: Gustambito; variant: Variant; variantIndex: number };
 type Friend = { email: string; name: string | null; image: string | null; friend_code: string; progress: { gustambito_id: number; variant_label: string; level: number }[] };
 
-const spriteUrl = (key: string, variant = "") => {
-  const remote = `https://fortnite.gg/img/x/sprites/icons/T_Icon_BR_Creature_Sprite_${key}${variant ? `_${variant}` : ""}_L.webp`;
-  return `/api/sprite?url=${encodeURIComponent(remote)}`;
-};
+const spriteUrl = (key: string, variant = "") => `https://fortnite.gg/img/x/sprites/icons/T_Icon_BR_Creature_Sprite_${key}${variant ? `_${variant}` : ""}_L.webp`;
 const makeVariants = (key: string, levels: number[] = [0, 0, 0], variantKeys: [string, string][] = [["Base", ""], ["Dorado", "Gold"], ["Cheat Master", "Cheatmaster"]]): Variant[] => variantKeys.map(([label, suffix], index) => ({ label, image: spriteUrl(key, suffix), level: levels[index] ?? 0 }));
 const withLootHacker = (key: string, variants: Variant[], bountyKey = key): Variant[] => [...variants, { label: "Loot Hacker", image: spriteUrl(key, "Hacker"), level: 0 }, { label: "Bounty Hunter", image: spriteUrl(bountyKey, "BountyHunter"), level: 0 }];
 const unreleased = (variants: Variant[]): Variant[] => variants.map((variant) => ({ ...variant, available: false }));
