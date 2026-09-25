@@ -10,9 +10,12 @@ type Gustambito = { id: number; name: string; subtitle: string; rarity: "Mítico
 type VariantCard = { item: Gustambito; variant: Variant; variantIndex: number };
 type Friend = { email: string; name: string | null; image: string | null; friend_code: string; progress: { gustambito_id: number; variant_label: string; level: number }[] };
 
-const spriteUrl = (key: string, variant = "") => `https://fortnite.gg/img/x/sprites/icons/T_Icon_BR_Creature_Sprite_${key}${variant ? `_${variant}` : ""}_L.webp`;
+const spriteUrl = (key: string, variant = "") => {
+  const remote = `https://fortnite.gg/img/x/sprites/icons/T_Icon_BR_Creature_Sprite_${key}${variant ? `_${variant}` : ""}_L.webp`;
+  return `/api/sprite?url=${encodeURIComponent(remote)}`;
+};
 const makeVariants = (key: string, levels: number[] = [0, 0, 0], variantKeys: [string, string][] = [["Base", ""], ["Dorado", "Gold"], ["Cheat Master", "Cheatmaster"]]): Variant[] => variantKeys.map(([label, suffix], index) => ({ label, image: spriteUrl(key, suffix), level: levels[index] ?? 0 }));
-const withLootHacker = (key: string, variants: Variant[]): Variant[] => [...variants, { label: "Loot Hacker", image: spriteUrl(key, "Hacker"), level: 0 }, { label: "Bounty Hunter", image: spriteUrl(key, "BountyHunter"), level: 0 }];
+const withLootHacker = (key: string, variants: Variant[], bountyKey = key): Variant[] => [...variants, { label: "Loot Hacker", image: spriteUrl(key, "Hacker"), level: 0 }, { label: "Bounty Hunter", image: spriteUrl(bountyKey, "BountyHunter"), level: 0 }];
 const unreleased = (variants: Variant[]): Variant[] => variants.map((variant) => ({ ...variant, available: false }));
 const initialGustambitos: Gustambito[] = [
   { id: 8, name: "Jonesy", subtitle: "El héroe de siempre", rarity: "Épico", color: "#ef7b5b", image: spriteUrl("Jonesy"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Jonesy", makeVariants("Jonesy")) },
@@ -21,7 +24,7 @@ const initialGustambitos: Gustambito[] = [
   { id: 9, name: "Sonic", subtitle: "Corre a velocidad sónica", rarity: "Mítico", color: "#55b7ed", image: spriteUrl("NarrowFlea_Obsidian"), season: "GLITCH · Capítulo 7", variants: withLootHacker("NarrowFlea", makeVariants("NarrowFlea_Obsidian")) },
   { id: 4, name: "Tails", subtitle: "El compañero volador", rarity: "Épico", color: "#e98b42", image: spriteUrl("NarrowFlea_Monkey"), season: "GLITCH · Capítulo 7", variants: withLootHacker("NarrowFlea_Monkey", makeVariants("NarrowFlea_Monkey")) },
   { id: 2, name: "Shadow", subtitle: "Se mueve entre las sombras", rarity: "Épico", color: "#5b4e74", image: spriteUrl("NarrowFlea_Scribe"), season: "GLITCH · Capítulo 7", variants: withLootHacker("ReloadOverTime", makeVariants("NarrowFlea_Scribe")) },
-  { id: 11, name: "8-Bit", subtitle: "Directo desde el arcade", rarity: "Épico", color: "#e86552", image: spriteUrl("EightBitBlaster"), season: "GLITCH · Capítulo 7", variants: withLootHacker("EightBitBlaster", makeVariants("EightBitBlaster")) },
+  { id: 11, name: "8-Bit", subtitle: "Directo desde el arcade", rarity: "Épico", color: "#e86552", image: spriteUrl("EightBitBlaster"), season: "GLITCH · Capítulo 7", variants: withLootHacker("EightBitBlaster", makeVariants("EightBitBlaster"), "8BitBlaster") },
   { id: 1, name: "Jackrabbit", subtitle: "Salta más lejos", rarity: "Raro", color: "#8ed35b", image: spriteUrl("JazzJackrabbit"), season: "GLITCH · Capítulo 7", variants: withLootHacker("DoubleJump", makeVariants("JazzJackrabbit")) },
   { id: 10, name: "Victorioso", subtitle: "Realeza en el lobby", rarity: "Mítico", color: "#e6534e", image: spriteUrl("Crown"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Crown", makeVariants("Crown")) },
   { id: 5, name: "Killswitch", subtitle: "Controla el sistema", rarity: "Épico", color: "#94a5a1", image: spriteUrl("Killswitch"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Killswitch", makeVariants("Killswitch")) },
