@@ -12,7 +12,8 @@ type Friend = { email: string; name: string | null; image: string | null; friend
 
 const spriteUrl = (key: string, variant = "") => `https://fortnite.gg/img/x/sprites/icons/T_Icon_BR_Creature_Sprite_${key}${variant ? `_${variant}` : ""}_L.webp`;
 const makeVariants = (key: string, levels: number[] = [0, 0, 0], variantKeys: [string, string][] = [["Base", ""], ["Dorado", "Gold"], ["Cheat Master", "Cheatmaster"]]): Variant[] => variantKeys.map(([label, suffix], index) => ({ label, image: spriteUrl(key, suffix), level: levels[index] ?? 0 }));
-const withLootHacker = (key: string, variants: Variant[]): Variant[] => [...variants, { label: "Loot Hacker", image: spriteUrl(key, "Hacker"), level: 0 }];
+const withLootHacker = (key: string, variants: Variant[]): Variant[] => [...variants, { label: "Loot Hacker", image: spriteUrl(key, "Hacker"), level: 0 }, { label: "Bounty Hunter", image: spriteUrl(key, "BountyHunter"), level: 0 }];
+const unreleased = (variants: Variant[]): Variant[] => variants.map((variant) => ({ ...variant, available: false }));
 const initialGustambitos: Gustambito[] = [
   { id: 8, name: "Jonesy", subtitle: "El héroe de siempre", rarity: "Épico", color: "#ef7b5b", image: spriteUrl("Jonesy"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Jonesy", makeVariants("Jonesy")) },
   { id: 6, name: "Aventurero", subtitle: "Siempre busca el siguiente nivel", rarity: "Épico", color: "#c47f48", image: spriteUrl("Dwarf"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Dwarf", makeVariants("Dwarf")) },
@@ -22,7 +23,7 @@ const initialGustambitos: Gustambito[] = [
   { id: 2, name: "Shadow", subtitle: "Se mueve entre las sombras", rarity: "Épico", color: "#5b4e74", image: spriteUrl("NarrowFlea_Scribe"), season: "GLITCH · Capítulo 7", variants: withLootHacker("ReloadOverTime", makeVariants("NarrowFlea_Scribe")) },
   { id: 11, name: "8-Bit", subtitle: "Directo desde el arcade", rarity: "Épico", color: "#e86552", image: spriteUrl("EightBitBlaster"), season: "GLITCH · Capítulo 7", variants: withLootHacker("EightBitBlaster", makeVariants("EightBitBlaster")) },
   { id: 1, name: "Jackrabbit", subtitle: "Salta más lejos", rarity: "Raro", color: "#8ed35b", image: spriteUrl("JazzJackrabbit"), season: "GLITCH · Capítulo 7", variants: withLootHacker("DoubleJump", makeVariants("JazzJackrabbit")) },
-  { id: 10, name: "Victorioso", subtitle: "Realeza en el lobby", rarity: "Mítico", color: "#e6534e", image: spriteUrl("Crown"), season: "GLITCH · Capítulo 7", variants: makeVariants("Crown").concat({ label: "Loot Hacker", image: spriteUrl("Crown", "Hacker"), level: 0, available: true }) },
+  { id: 10, name: "Victorioso", subtitle: "Realeza en el lobby", rarity: "Mítico", color: "#e6534e", image: spriteUrl("Crown"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Crown", makeVariants("Crown")) },
   { id: 5, name: "Killswitch", subtitle: "Controla el sistema", rarity: "Épico", color: "#94a5a1", image: spriteUrl("Killswitch"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Killswitch", makeVariants("Killswitch")) },
   { id: 7, name: "Klombo", subtitle: "El gigante amistoso", rarity: "Mítico", color: "#ef63c4", image: spriteUrl("Klombo"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Klombo", makeVariants("Klombo")) },
   { id: 14, name: "Mega Man", subtitle: "Se desliza con menos fricción", rarity: "Raro", color: "#4c9bf5", image: spriteUrl("ImprovedSlide"), season: "GLITCH · Capítulo 7", variants: makeVariants("ImprovedSlide", [0], [["Base", ""]]) },
@@ -34,7 +35,7 @@ const initialGustambitos: Gustambito[] = [
   { id: 18, name: "Blinky", subtitle: "Se camufla al recibir daño", rarity: "Épico", color: "#ed4054", image: spriteUrl("GhostDamage"), season: "GLITCH · Capítulo 7", variants: withLootHacker("GhostDamage", makeVariants("GhostDamage")) },
   { id: 19, name: "Morgana", subtitle: "Mejora la eficacia de curación", rarity: "Épico", color: "#e8e8ef", image: spriteUrl("IncreaseHeals"), season: "GLITCH · Capítulo 7", variants: withLootHacker("IncreaseHeals", makeVariants("IncreaseHeals")) },
   { id: 20, name: "Pond", subtitle: "Salto súper cargado", rarity: "Épico", color: "#54c58b", image: spriteUrl("WinnerA"), season: "GLITCH · Capítulo 7", variants: withLootHacker("WinnerA", makeVariants("WinnerA")) },
-  { id: 21, name: "Birthday", subtitle: "Pastel sorpresa en cofres", rarity: "Épico", color: "#f18cc3", image: spriteUrl("Birthday"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Birthday", makeVariants("Birthday")) },
+  { id: 21, name: "Birthday", subtitle: "Pastel sorpresa en cofres", rarity: "Épico", color: "#f18cc3", image: spriteUrl("Birthday"), season: "GLITCH · Capítulo 7", variants: unreleased(withLootHacker("Birthday", makeVariants("Birthday"))) },
 ];
 
 const wrixelStyles = [

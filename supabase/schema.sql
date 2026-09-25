@@ -102,7 +102,10 @@ on conflict (code) do nothing;
 
 insert into public.fortnite_codes (code, reward) values
   ('BeamMeUp', '2 Aceleradores de Extracción'),
-  ('SAYH12WR1X3L', 'Spray “Retrato heroico de Wrixel”')
+  ('SAYH12WR1X3L', 'Spray “Retrato heroico de Wrixel”'),
+  ('9Years', 'Spray de cumpleaños número 9'),
+  ('AlmostScaringSeason', '2 Localizadores de códigos'),
+  ('NoProLlama', '1 suministro de llama')
 on conflict (code) do nothing;
 
 -- Conserva códigos usados e historial; solo deja de ofrecer el código vencido.
