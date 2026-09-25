@@ -38,7 +38,7 @@ const initialGustambitos: Gustambito[] = [
   { id: 18, name: "Blinky", subtitle: "Se camufla al recibir daño", rarity: "Épico", color: "#ed4054", image: spriteUrl("GhostDamage"), season: "GLITCH · Capítulo 7", variants: withLootHacker("GhostDamage", makeVariants("GhostDamage")) },
   { id: 19, name: "Morgana", subtitle: "Mejora la eficacia de curación", rarity: "Épico", color: "#e8e8ef", image: spriteUrl("IncreaseHeals"), season: "GLITCH · Capítulo 7", variants: withLootHacker("IncreaseHeals", makeVariants("IncreaseHeals")) },
   { id: 20, name: "Pond", subtitle: "Salto súper cargado", rarity: "Épico", color: "#54c58b", image: spriteUrl("WinnerA"), season: "GLITCH · Capítulo 7", variants: withLootHacker("WinnerA", makeVariants("WinnerA")) },
-  { id: 21, name: "Birthday", subtitle: "Pastel sorpresa en cofres", rarity: "Épico", color: "#f18cc3", image: spriteUrl("Birthday"), season: "GLITCH · Capítulo 7", variants: unreleased(withLootHacker("Birthday", makeVariants("Birthday"))) },
+  { id: 21, name: "Birthday", subtitle: "Pastel sorpresa en cofres", rarity: "Épico", color: "#f18cc3", image: spriteUrl("Birthday"), season: "GLITCH · Capítulo 7", variants: withLootHacker("Birthday", makeVariants("Birthday")) },
 ];
 
 const wrixelStyles = [
