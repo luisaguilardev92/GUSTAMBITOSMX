@@ -102,16 +102,30 @@ on conflict (code) do nothing;
 
 insert into public.fortnite_codes (code, reward) values
   ('BeamMeUp', '2 Aceleradores de Extracción'),
+  ('S7H-50P-R03', 'Historia de Geno'),
+  ('WeAreTheWorldChampionsToday', 'Mochila “FNCS Sentry”'),
   ('SAYH12WR1X3L', 'Spray “Retrato heroico de Wrixel”'),
   ('9Years', 'Spray de cumpleaños número 9'),
   ('AlmostScaringSeason', '2 Localizadores de códigos'),
+  ('IThinkTheKeyFoundMeChat', '1 Acelerador de Extracción'),
+  ('BoneRattler', '4 Tacos picantes'),
+  ('WhoCrackedTheCode', '40,000 PE'),
+  ('DustySprites', '5,000 Polvo de Espíritus'),
+  ('PlayToLevelUp', '2,000 Polvo de Espíritus'),
+  ('CrowsAreAfraid', 'Transformación en espantapájaros en el lobby'),
+  ('PumpkinSpiceLife', 'Transformación en calabaza en el lobby'),
   ('NoProLlama', '1 suministro de llama')
-on conflict (code) do nothing;
+on conflict (code) do update
+set reward = excluded.reward, active = true, updated_at = now();
 
 -- Conserva códigos usados e historial; solo deja de ofrecer el código vencido.
 update public.fortnite_codes
 set active = false, updated_at = now()
-where upper(code) = 'NOPROLLAMA' and active;
+where code = 'NOPROLLAMA' and active;
+
+update public.fortnite_codes
+set active = true, updated_at = now()
+where code = 'NoProLlama' and not active;
 
 drop policy if exists "realtime can read progress" on public.gustambito_progress;
 create policy "realtime can read progress"
