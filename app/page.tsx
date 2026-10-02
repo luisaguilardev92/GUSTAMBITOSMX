@@ -10,7 +10,7 @@ type Gustambito = { id: number; name: string; subtitle: string; rarity: "Mítico
 type VariantCard = { item: Gustambito; variant: Variant; variantIndex: number };
 type Friend = { email: string; name: string | null; image: string | null; friend_code: string; progress: { gustambito_id: number; variant_label: string; level: number }[] };
 
-const spriteUrl = (key: string, variant = "") => `/api/sprite?url=${encodeURIComponent(`https://fortnite.gg/img/x/sprites/icons/T_Icon_BR_Creature_Sprite_${key}${variant ? `_${variant}` : ""}_L.webp`)}`;
+const spriteUrl = (key: string, variant = "") => `https://fortnite.gg/img/x/sprites/icons/T_Icon_BR_Creature_Sprite_${key}${variant ? `_${variant}` : ""}_L.webp`;
 const makeVariants = (key: string, levels: number[] = [0, 0, 0], variantKeys: [string, string][] = [["Base", ""], ["Dorado", "Gold"], ["Cheat Master", "Cheatmaster"]]): Variant[] => variantKeys.map(([label, suffix], index) => ({ label, image: spriteUrl(key, suffix), level: levels[index] ?? 0 }));
 const withLootHacker = (key: string, variants: Variant[], bountyKey = key): Variant[] => [...variants, { label: "Loot Hacker", image: spriteUrl(key, "Hacker"), level: 0 }, { label: "Bounty Hunter", image: spriteUrl(bountyKey, "BountyHunter"), level: 0 }];
 const unreleased = (variants: Variant[]): Variant[] => variants.map((variant) => ({ ...variant, available: false }));
@@ -57,7 +57,7 @@ const wrixelStyles = [
 ] as const;
 
 const migrate = (value: Gustambito[]): Gustambito[] => initialGustambitos.map((item) => { const saved = value.find((entry) => entry.id === item.id); return { ...item, variants: item.variants.map((variant) => { const old = saved?.variants.find((entry) => entry.label === variant.label); return old ? { ...variant, level: typeof old.level === "number" ? old.level : ("obtained" in old && old.obtained ? 1 : 0) } : variant; }) }; });
-const onSpriteImageError = (event: SyntheticEvent<HTMLImageElement>) => { const image = event.currentTarget; if (image.src.endsWith("/sprite-coming-soon.svg")) { image.onerror = null; return; } image.src = "/sprite-coming-soon.svg"; };
+const onSpriteImageError = (event: SyntheticEvent<HTMLImageElement>) => { const image = event.currentTarget; if (image.src.endsWith("/sprite-coming-soon.svg")) { image.onerror = null; return; } if (image.src.startsWith("https://fortnite.gg/") && image.dataset.proxyAttempted !== "true") { image.dataset.proxyAttempted = "true"; image.src = `/api/sprite?url=${encodeURIComponent(image.src)}`; return; } image.src = "/sprite-coming-soon.svg"; };
 
 const loadExportImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
   const image = new Image();
