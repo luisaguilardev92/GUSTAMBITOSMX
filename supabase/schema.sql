@@ -114,6 +114,7 @@ insert into public.fortnite_codes (code, reward) values
   ('PlayToLevelUp', '2,000 Polvo de Espíritus'),
   ('CrowsAreAfraid', 'Transformación en espantapájaros en el lobby'),
   ('PumpkinSpiceLife', 'Transformación en calabaza en el lobby'),
+  ('PowerOut', 'Susto de FNAF en el lobby'),
   ('NoProLlama', '1 suministro de llama')
 on conflict (code) do update
 set reward = excluded.reward, active = true, updated_at = now();
