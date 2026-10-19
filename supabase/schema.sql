@@ -115,7 +115,13 @@ insert into public.fortnite_codes (code, reward) values
   ('CrowsAreAfraid', 'Transformación en espantapájaros en el lobby'),
   ('PumpkinSpiceLife', 'Transformación en calabaza en el lobby'),
   ('PowerOut', 'Susto de FNAF en el lobby'),
-  ('NoProLlama', '1 suministro de llama')
+  ('NoProLlama', '1 suministro de llama'),
+  ('VeryScaryPumpkin', '3 Snack-O’-Lantern'),
+  ('DOOR2DOOR4CANDY', '2 Aceleradores de Extracción'),
+  ('runSystemOverride', '5,000 Polvo de Espíritus · Requiere completar la parte 2 de la historia de Geno'),
+  ('ImTheRealEdgelord', '5,000 Polvo de Espíritus · Requiere completar la parte 2 de la historia de Wrixel'),
+  ('MagicIsReal', '5,000 Polvo de Espíritus · Requiere completar la historia de Bastian'),
+  ('S7H-50P-R03', 'Glitch del lobby · Requiere registrar 3 códigos de hack en la historia de Geno')
 on conflict (code) do update
 set reward = excluded.reward, active = true, updated_at = now();
 
@@ -148,3 +154,4 @@ begin
 exception when duplicate_object then
   null;
 end $$;
+
